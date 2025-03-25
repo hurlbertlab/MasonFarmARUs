@@ -33,3 +33,10 @@ for (f in files) {
 }
 
 write.csv(combined_data, "data/2022_k9_totalobvs.csv")
+
+##############################
+
+# Creating hour bins
+
+combined_data <- combined_data |>
+  mutate(hr_st = start/360, hr_end = end/3600)
