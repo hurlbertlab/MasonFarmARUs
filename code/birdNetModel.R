@@ -7,8 +7,7 @@ library(birdnetR)
 library(dplyr)
 model <- birdnet_model_tflite("v2.4")
 
-audio_path <- "C:/git/MasonFarmARUs/data/2022_k9_birdnet/20220531_093000.BirdNET.results.csv"
-
+audio_path <- "E:/2022/BigOakWoods/I9/20220526_093000.WAV"
 # Predict species in the audio file
 results <- predict_species_from_audio_file(model = model, 
                                            audio_path, 
