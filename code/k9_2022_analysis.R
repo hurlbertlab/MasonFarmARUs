@@ -9,7 +9,7 @@ library(lubridate)
 library(ggplot2)
 library(tidyr)
 #first need to go through each file and extract the data and name of file and add to new column
-files = list.files(path = "C:/git/MasonFarmARUs/data/2022_k9_birdnet/", full.names = TRUE)
+files = list.files(path = "C:/git/MasonFarmARUs/data/2022_k9_birdnet_allConfs/", full.names = TRUE)
 
 # Initialize an empty data frame to store combined results
 combined_data <- data.frame()
