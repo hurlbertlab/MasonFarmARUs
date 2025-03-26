@@ -83,7 +83,7 @@ ggplot(long_data, aes(x = hour_bin, y = total_calls)) +
   geom_boxplot(fill = c("lightblue", "lightgreen", "lightcoral")) +
   labs(title = "Boxplot of Vocalizations by Hour for K9 2022",
        x = "Hour of Day",
-       y = "Total Calls") +
+       y = "Number of Vocalizations") +
   theme_minimal()
 
 ############
