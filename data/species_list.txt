@@ -1,0 +1,63 @@
+Zenaida macroura_Mourning Dove
+Coccyzus americanus_Yellow-billed Cuckoo
+Chaetura pelagica_Chimney Swift
+Anas platyrhynchos_Mallard 
+Archilochus colubris_Ruby-throated Hummingbird
+Charadrius vociferus_Killdeer
+Ardea herodias_Great Blue Heron
+Coragyps atratus_Black Vulture
+Cathartes aura_Turkey Vulture
+Pandion haliaetus_Osprey
+Buteo lineatus_Red-shouldered Hawk
+Buteo jamaicensis_Red-tailed Hawk
+Strix varia_Barred Owl
+Megaceryle alcyon_Belted Kingfisher
+Melanerpes erythrocephalus_Red-headed Woodpecker
+Melanerpes carolinus_Red-bellied Woodpecker
+Dryobates pubescens_Downy Woodpecker
+Leuconotopicus villosus_Hairy Woodpecker
+Dryocopus pileatus_Pileated Woodpecker
+Colaptes auratus_Northern Flicker
+Contopus virens_Eastern Wood-Pewee
+Empidonax virescens_Acadian Flycatcher
+Sayornis phoebe_Eastern Phoebe
+Myiarchus crinitus_Great Crested Flycatcher
+Tyrannus tyrannus_Eastern Kingbird
+Vireo griseus_White-eyed Vireo
+Vireo flavifrons_Yellow-throated Vireo
+Vireo olivaceus_Red-eyed Vireo
+Cyanocitta cristata_Blue Jay
+Corvus brachyrhynchos_American Crow
+Corvus ossifragus_Fish Crow
+Poecile carolinensis_Carolina Chickadee
+Baeolophus bicolor_Tufted Titmouse
+Sitta carolinensis_White-breasted Nuthatch
+Sitta pusilla_Brown-headed Nuthatch
+Polioptila caerulea_Blue-gray Gnatcatcher
+Thryothorus ludovicianu_Carolina Wren
+Sturnus vulgaris_European Starling
+Toxostoma rufum_Brown Thrasher
+Mimus polyglottos_Northern Mockingbird
+Sialia sialis_Eastern Bluebird
+Turdus migratorius_American Robin 
+Carpodacus mexicanus_House Finch
+Spinus tristis_American Goldfinch
+Spizella passerina_Chipping Sparrow
+Pipilo erythrophthalmus_Eastern Towhee
+Agelaius phoeniceus_Red-winged Blackbird
+Molothrus ater_Brown-headed Cowbird
+Quiscalus quiscula_Common Grackle
+Seiurus aurocapilla_Ovenbird
+Mniotilta varia_Black-and-white Warbler
+Protonotaria citrea_Prothonotary Warbler 
+Geothylypis trichas_Common Yellowthroat
+Setophaga ruticilla_American Redstart
+Setophaga americana_Northern Parula
+Setophaga pinus_Pine Warbler
+Setophaga dominica_Yellow-throated Warbler
+Piranga rubra_Summer Tanager
+Piranga olivacea_Scarlet Tanager
+Cardinalis cardinalis_Northern Cardinal
+Passerina caerulea_Blue Grosbeak
+Passerina cyanea_Indigo Bunting
+
