@@ -35,7 +35,7 @@ for (f in files) {
   }
 }
 
-write.csv(combined_data, "data/2022_k9_totalobvs.csv")
+write.csv(combined_data, "data/k9_analysis/2022_k9_totalobvs.csv")
 
 ##############################
 
@@ -43,6 +43,7 @@ write.csv(combined_data, "data/2022_k9_totalobvs.csv")
 
 
 ##############################
+combined_data <- read.csv("data/k9_analysis/2022_k9_totalobvs.csv")
 
 combined_data <- combined_data |>
   rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
@@ -84,3 +85,50 @@ ggplot(long_data, aes(x = hour_bin, y = total_calls)) +
        x = "Hour of Day",
        y = "Total Calls") +
   theme_minimal()
+
+############
+
+# Graphing how number of calls changes by Julian day- GGplot version
+jdvcalls <- ggplot(hrly_data, aes(x = julian_day)) +
+  geom_line(aes(y = total), color = "black") + 
+  geom_line(aes(y = three_am_total), color = "lightblue") + 
+  geom_line(aes(y = four_am_total), color = "lightgreen") + 
+  geom_line(aes(y = five_am_total), color = "lightcoral")
+
+jdvcalls
+
+#other version
+plot(hrly_data$julian_day,
+     hrly_data$total, 
+     xlab = "Julian Day",
+     ylab = "Number of Vocalizations", 
+     ylim = c(0, 900), xlim = c(151,201),
+     type = 'l',
+     col = 'black', 
+     lwd = 2)
+points(hrly_data$julian_day, 
+       hrly_data$three_am_total,
+       type = 'l',
+       col = "lightblue",
+       lwd = 2)
+points(hrly_data$julian_day, 
+       hrly_data$four_am_total,
+       type = 'l',
+       col = "lightgreen",
+       lwd = 2)
+points(hrly_data$julian_day, 
+       hrly_data$five_am_total,
+       type = 'l',
+       col = "lightcoral",
+       lwd = 2)
+legend("topright", legend = c("Total",
+                              "Three AM to Four AM",
+                              "Four AM to Five AM",
+                              "Five AM to Six AM"),
+       col = c("black", "lightblue", "lightgreen", "lightcoral"),
+       lwd = 2)
+######################
+
+# Analyzing how abundance of species vocalizations changes
+
+######################
