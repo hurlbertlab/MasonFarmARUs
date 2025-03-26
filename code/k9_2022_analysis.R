@@ -47,26 +47,16 @@ write.csv(combined_data, "data/k9_analysis/2022_k9_totalobvs.csv")
 
 
 ##############################
-combined_data <- read.csv("data/k9_analysis/2022_k9_totalobvs.csv")
-combined_data |>
+combined_data <- read.csv("data/k9_analysis/2022_k9_totalobvs.csv") %>%
   rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
-  mutate(hr_st = start/360, hr_end = end/3600)|>
+  mutate(hr_bin = ceiling(start/3600))
   
-# Creating hour bins 
-combined_data <- combined_data |>
-  mutate(hr_bin = ifelse(hr_end < 1, 3,
-                         ifelse(hr_end < 2, 4,
-                                ifelse(hr_end < 3, 5, NA))))
 
 # Creating a dataframe with the total number of vocalizations for each day at each hour
-hrly_data <- combined_data |>
-  group_by(julian_day) |>
-  summarize(
-    total = n(),  # Count total rows in each group
-    three_am_total = sum(hr_bin == 3, na.rm = TRUE),  # Count rows where hr_bin == 3
-    four_am_total = sum(hr_bin == 4, na.rm = TRUE),   # Count rows where hr_bin == 4
-    five_am_total = sum(hr_bin == 5, na.rm = TRUE)    # Count rows where hr_bin == 5
-  )
+hrly_sp_cts <- combined_data |>
+  count(julian_day, hr_bin, Common.name)
+
+# summarize(numSpp = n_distinct(Common.name))
 
 write.csv(hrly_data, "data/k9_analysis/hourlyVocalData.csv")
 #######
