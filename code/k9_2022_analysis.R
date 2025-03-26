@@ -70,6 +70,67 @@ hrly_data <- combined_data |>
 write.csv(hrly_data, "data/k9_analysis/hourlyVocalData.csv")
 #######
 
+# Descriptive Statistics for Hourly Calls
+
+####### 
+hrly_data <- read.csv("data/k9_analysis/hourlyVocalData.csv")
+
+#Total Vocalizations 
+
+summary_total <- hrly_data |>
+  summarize("smallest number of vocalizations" = min(total),
+            "25% quantile" = quantile(total, probs=c(.25)),
+            "average number" = mean(total),
+            "median number" = median(total),
+            "75% quantile" = quantile(total, probs=c(.75)),
+            "largest number of vocalizations" = max(total),
+            variance=var(total))|>
+  glimpse()
+
+write.csv(summary_total, "data/k9_analysis/stats_results/summary_total.csv")
+
+#Three AM Vocalizations 
+
+summary_threeAM <- hrly_data |>
+  summarize("smallest number of vocalizations" = min(three_am_total),
+            "25% quantile" = quantile(three_am_total, probs=c(.25)),
+            "average number" = mean(three_am_total),
+            "median number" = median(three_am_total),
+            "75% quantile" = quantile(three_am_total, probs=c(.75)),
+            "largest number of vocalizations" = max(three_am_total),
+            variance=var(three_am_total))|>
+  glimpse()
+write.csv(summary_threeAM, "data/k9_analysis/stats_results/summary_threeAM.csv")
+#Four AM Vocalizations
+
+summary_fourAM <- hrly_data |>
+  summarize("smallest number of vocalizations" = min(four_am_total),
+            "25% quantile" = quantile(four_am_total, probs=c(.25)),
+            "average number" = mean(four_am_total),
+            "median number" = median(four_am_total),
+            "75% quantile" = quantile(four_am_total, probs=c(.75)),
+            "largest number of vocalizations" = max(four_am_total),
+            variance=var(four_am_total))|>
+  glimpse()
+
+write.csv(summary_fourAM, "data/k9_analysis/stats_results/summary_fourAM.csv")
+
+#Five AM Vocalizations
+
+summary_fiveAM <- hrly_data |>
+  summarize("smallest number of vocalizations" = min(five_am_total),
+            "25% quantile" = quantile(five_am_total, probs=c(.25)),
+            "average number" = mean(five_am_total),
+            "median number" = median(five_am_total),
+            "75% quantile" = quantile(five_am_total, probs=c(.75)),
+            "largest number of vocalizations" = max(five_am_total),
+            variance=var(five_am_total))|>
+  glimpse()
+
+write.csv(summary_fiveAM, "data/k9_analysis/stats_results/summary_fiveAM.csv")
+
+######
+
 # Making box plots of calls made in each hour 
 
 #######
