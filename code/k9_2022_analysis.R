@@ -35,6 +35,10 @@ for (f in files) {
   }
 }
 
+combined_data <- combined_data |>
+  mutate(date = as.Date(date),  # Convert to Date object
+         julian_day = yday(date)) # Convert to julian day
+
 write.csv(combined_data, "data/k9_analysis/2022_k9_totalobvs.csv")
 
 ##############################
@@ -44,13 +48,10 @@ write.csv(combined_data, "data/k9_analysis/2022_k9_totalobvs.csv")
 
 ##############################
 combined_data <- read.csv("data/k9_analysis/2022_k9_totalobvs.csv")
-
-combined_data <- combined_data |>
+combined_data |>
   rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
   mutate(hr_st = start/360, hr_end = end/3600)|>
-  mutate(date = as.Date(date),  # Convert to Date object
-                  julian_day = yday(date)) # Convert to julian day
-
+  
 # Creating hour bins 
 combined_data <- combined_data |>
   mutate(hr_bin = ifelse(hr_end < 1, 3,
@@ -193,3 +194,118 @@ legend("topright", legend = c("Total",
 # Analyzing how abundance of species vocalizations changes
 
 ######################
+
+# Distinct species identification versus jd and hours difference 
+
+######
+
+# overall 
+
+######
+total_obvs <- read.csv("data/k9_analysis/2022_k9_totalobvs.csv")
+
+# Finding the amount of species observed for each day
+unique_obvs <- total_obvs |>
+  group_by(julian_day) |>
+  summarize(unique= n_distinct(Common.name))
+
+# graphing this 
+plot(unique_obvs$julian_day,
+     unique_obvs$unique,
+     xlab = "Julian Day",
+     ylab = "Number of Species Identified", 
+     ylim = c(0, 16), xlim = c(151,201),
+     type = 'l',
+     col = 'black', 
+     lwd = 2)
+
+#####
+
+# Breaking this down further into hour blocks 
+
+#####
+
+hrly_unique <- total_obvs |>
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(hr_st = start/3600, hr_end = end/3600)|>
+  mutate(hr_bin = ifelse(hr_end < 1, 3,
+                         ifelse(hr_end < 2, 4,
+                                ifelse(hr_end < 3, 5, NA))))|>
+  group_by(julian_day, hr_bin)|>
+  summarize(num_unique_species = n_distinct(Common.name), .groups = "drop")
+
+write.csv(hrly_unique, "data/k9_analysis/unique_obvs.csv")
+
+#graphing this 
+ggplot(hrly_unique, aes(x = julian_day, y = num_unique_species, color = as.factor(hr_bin))) +
+  geom_line() +  # Add lines for each hr_bin
+  labs(
+    title = "Unique Species Observed Over Julian Days",
+    x = "Julian Day",
+    y = "Number of Unique Species",
+    color = "Hour of the Morning"
+  ) +
+  theme_minimal()
+
+#######
+
+# Descriptive Statistics for Hourly Unique Species
+
+####### 
+hrly_unique2 <- hrly_unique |>
+  mutate(three_hr_bin = ifelse(hr_bin==3, TRUE, FALSE))|>
+  mutate(four_hr_bin = ifelse(hr_bin==4, TRUE, FALSE))|>
+  mutate(five_hr_bin = ifelse(hr_bin==5, TRUE, FALSE))
+
+#Total Vocalizations 
+
+summary_total <- unique_obvs |>
+  summarize("smallest number of vocalizations" = min(unique),
+            "25% quantile" = quantile(unique, probs=c(.25)),
+            "average number" = mean(unique),
+            "median number" = median(unique),
+            "75% quantile" = quantile(unique, probs=c(.75)),
+            "largest number of vocalizations" = max(unique),
+            variance=var(unique))|>
+  glimpse()
+
+write.csv(summary_total, "data/k9_analysis/stats_results/summary_species_overall.csv")
+
+#Three AM Vocalizations 
+
+summary_threeAM <- hrly_unique2 |>
+  summarize("smallest number of vocalizations" = min(num_unique_species[three_hr_bin==TRUE], na.rm = TRUE),
+            "25% quantile" = quantile(num_unique_species[three_hr_bin==TRUE],na.rm = TRUE, probs=c(.25)),
+            "average number" = mean(num_unique_species[three_hr_bin==TRUE],na.rm = TRUE),
+            "median number" = median(num_unique_species[three_hr_bin==TRUE],na.rm = TRUE),
+            "75% quantile" = quantile(num_unique_species[three_hr_bin==TRUE],na.rm = TRUE, probs=c(.75)),
+            "largest number of vocalizations" = max(num_unique_species[three_hr_bin==TRUE],na.rm = TRUE),
+            variance=var(num_unique_species[three_hr_bin==TRUE],na.rm = TRUE))|>
+  glimpse()
+write.csv(summary_threeAM, "data/k9_analysis/stats_results/summary_threeAM_species.csv")
+
+#Four AM Vocalizations
+
+summary_fourAM <- hrly_unique2 |>
+  summarize("smallest number of vocalizations" = min(num_unique_species[four_hr_bin==TRUE], na.rm = TRUE),
+            "25% quantile" = quantile(num_unique_species[four_hr_bin==TRUE],na.rm = TRUE, probs=c(.25)),
+            "average number" = mean(num_unique_species[four_hr_bin==TRUE],na.rm = TRUE),
+            "median number" = median(num_unique_species[four_hr_bin==TRUE],na.rm = TRUE),
+            "75% quantile" = quantile(num_unique_species[four_hr_bin==TRUE],na.rm = TRUE, probs=c(.75)),
+            "largest number of vocalizations" = max(num_unique_species[four_hr_bin==TRUE],na.rm = TRUE),
+            variance=var(num_unique_species[four_hr_bin==TRUE],na.rm = TRUE))|>
+  glimpse()
+write.csv(summary_fourAM, "data/k9_analysis/stats_results/summary_fourAM_species.csv")
+
+#Five AM Vocalizations
+
+summary_fiveAM <- hrly_unique2 |>
+  summarize("smallest number of vocalizations" = min(num_unique_species[five_hr_bin==TRUE], na.rm = TRUE),
+            "25% quantile" = quantile(num_unique_species[five_hr_bin==TRUE],na.rm = TRUE, probs=c(.25)),
+            "average number" = mean(num_unique_species[five_hr_bin==TRUE],na.rm = TRUE),
+            "median number" = median(num_unique_species[five_hr_bin==TRUE],na.rm = TRUE),
+            "75% quantile" = quantile(num_unique_species[five_hr_bin==TRUE],na.rm = TRUE, probs=c(.75)),
+            "largest number of vocalizations" = max(num_unique_species[five_hr_bin==TRUE],na.rm = TRUE),
+            variance=var(num_unique_species[five_hr_bin==TRUE],na.rm = TRUE))|>
+  glimpse()
+write.csv(summary_fiveAM, "data/k9_analysis/stats_results/summary_fiveAM_species.csv")
