@@ -5,6 +5,9 @@
 #############################
 library(dplyr)
 library(stringr)
+library(lubridate)
+library(ggplot2)
+library(tidyr)
 #first need to go through each file and extract the data and name of file and add to new column
 files = list.files(path = "C:/git/MasonFarmARUs/data/2022_k9_birdnet/", full.names = TRUE)
 
@@ -36,7 +39,48 @@ write.csv(combined_data, "data/2022_k9_totalobvs.csv")
 
 ##############################
 
-# Creating hour bins
+# Analyzing number of hourly calls 
+
+
+##############################
 
 combined_data <- combined_data |>
-  mutate(hr_st = start/360, hr_end = end/3600)
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(hr_st = start/360, hr_end = end/3600)|>
+  mutate(date = as.Date(date),  # Convert to Date object
+                  julian_day = yday(date)) # Convert to julian day
+
+# Creating hour bins 
+combined_data <- combined_data |>
+  mutate(hr_bin = ifelse(hr_end < 1, 3,
+                         ifelse(hr_end < 2, 4,
+                                ifelse(hr_end < 3, 5, NA))))
+
+# Creating a dataframe with the total number of vocalizations for each day at each hour
+hrly_data <- combined_data |>
+  group_by(julian_day) |>
+  summarize(
+    total = n(),  # Count total rows in each group
+    three_am_total = sum(hr_bin == 3, na.rm = TRUE),  # Count rows where hr_bin == 3
+    four_am_total = sum(hr_bin == 4, na.rm = TRUE),   # Count rows where hr_bin == 4
+    five_am_total = sum(hr_bin == 5, na.rm = TRUE)    # Count rows where hr_bin == 5
+  )
+
+write.csv(hrly_data, "data/k9_analysis/hourlyVocalData.csv")
+#######
+
+# Making box plots of calls made in each hour 
+
+#######
+long_data <- hrly_data |>
+  pivot_longer(cols = c(three_am_total, four_am_total, five_am_total),
+               names_to = "hour_bin",
+               values_to = "total_calls")
+
+# Create the boxplot
+ggplot(long_data, aes(x = hour_bin, y = total_calls)) +
+  geom_boxplot(fill = c("lightblue", "lightgreen", "lightcoral")) +
+  labs(title = "Boxplot of Vocalizations by Hour for K9 2022",
+       x = "Hour of Day",
+       y = "Total Calls") +
+  theme_minimal()
