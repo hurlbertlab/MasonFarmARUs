@@ -48,8 +48,8 @@ k9_filtered <- filtered |>
   filter(Confidence >= 0.1)|>
   filter(!(Common.name %in% c("Killdeer", "Black Vulture", "Turkey Vulture", 
                               "Osprey", "Northern Mockingbird", 
-                              "Brown Thrasher", "Belted Kingfisher")))
-  #select(-File, -file_name)
+                              "Brown Thrasher", "Belted Kingfisher")))|>
+  select(-File, -file_name)
 
 
 write.csv(k9_filtered, "data/2022_k9_filtered.csv")

@@ -1,0 +1,108 @@
+---
+title: "K9_Analysis"
+author: "Grace Layman"
+date: "2025-04-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Analysis on K9 Stake 2022
+
+## Total amount of species observed
+
+```{r}
+# Looking at Species Observations Across the Year 
+k9_total <- read.csv("data/2022_k9_filtered.csv")
+speciesList <- read.csv("data/species_list_csvCopy.csv")
+species <- speciesList$Common.Name
+julian_days <- 151:201
+complete_days <- crossing(Common.name = species, julian_day = julian_days)
+
+num_species <- k9_total |>
+  count(Common.name)|>
+  arrange(desc(n))|>
+  glimpse()
+
+
+# Want to make a dataframe that has all the combinations of julian days and species
+species_by_day <- k9_total |>
+  group_by(julian_day,)|>
+  count(Common.name)|>
+  arrange(desc(n)) |>
+  glimpse()
+
+species_day <- complete_days|>
+  left_join(species_by_day, by = c("Common.name", "julian_day"))|>
+  mutate(n = replace_na(n,0))
+
+write.csv(species_day,"data/species_by_day.csv")
+```
+
+I will be looking at seasonal and temporal variation in species abundance with the six species that were observed the most by Birdnet over the summer. This data is stored in the num_species data frame above. In order, these species are: Acadian Flycatcher, Summer Tanager, Yellow-throated Vireo, Eastern Wood-Pewee, Tufted Titmouse, and Scarlet Tanager.
+
+## Basic Stats on Observations
+
+```{r}
+k9_stats<- k9_total%>%
+  group_by(Common.name) %>% 
+  summarize(medianConf = median(Confidence),
+            maxConf = max(Confidence),
+            minConf = min(Confidence)) %>% 
+  arrange(desc(maxConf)) %>% data.frame()
+```
+
+## Trends Across the Seven Species 
+
+```{r}
+#Mapping Julian Day Versus the Number of Observations for the top Seven Species
+filtered_AF <- species_day[species_day$Common.name == "Acadian Flycatcher", ]
+plot(filtered_AF$julian_day,
+     filtered_AF$n, 
+     xlab = "Julian Day",
+     ylab = "Number of Vocalizations", 
+     ylim = c(0, 1000), xlim = c(151,201),
+     type = 'l',
+     col = 'lightgoldenrod', 
+     lwd = 2)
+filtered_ST <- species_day[species_day$Common.name == "Summer Tanager", ]
+points(filtered_ST$julian_day, 
+       filtered_ST$n,
+       type = 'l',
+       col = "lightblue",
+       lwd = 2)
+filtered_YV <- species_day[species_day$Common.name == "Yellow-throated Vireo", ]
+points(filtered_YV$julian_day, 
+       filtered_YV$n,
+       type = 'l',
+       col = "lightgreen",
+       lwd = 2)
+filtered_EP <- species_day[species_day$Common.name == "Eastern Wood-Pewee", ]
+points(filtered_EP$julian_day, 
+       filtered_EP$n,
+       type = 'l',
+       col = "lightcoral",
+       lwd = 2)
+filtered_TT <- species_day[species_day$Common.name == "Tufted Titmouse", ]
+points(filtered_TT$julian_day, 
+       filtered_TT$n,
+       type = 'l',
+       col = "plum3",
+       lwd = 2)
+filtered_SCT <- species_day[species_day$Common.name == "Scarlet Tanager", ]
+points(filtered_SCT$julian_day, 
+       filtered_SCT$n,
+       type = 'l',
+       col = "royalblue",
+       lwd = 2)
+legend("topright", legend = c("Acadian Flycatcher",
+                              "Summer Tanager",
+                              "Yellow-throated Vireo",
+                              "Eastern Wood-Pewee",
+                              "Tufted Titmouse",
+                              "Scarlet Tanager"),
+       col = c("lightgoldenrod", "lightblue", "lightgreen", "lightcoral", "plum3", "royalblue"),
+       lwd = 2)
+```
