@@ -35,30 +35,54 @@ for (f in files) {
   }
 }
 
-combined_data <- combined_data |>
+#Shortening this to only include species found on Mason Farm
+speciesList <- read.csv("data/species_list_csvCopy.csv")
+speciesVector <- speciesList$Common.Name
+filtered <- combined_data |>
+  filter(Common.name %in% speciesVector)
+  
+
+k9_filtered <- filtered |>
   mutate(date = as.Date(date),  # Convert to Date object
-         julian_day = yday(date)) # Convert to julian day
+         julian_day = yday(date))|>
+  filter(Confidence >= 0.1)|>
+  filter(!(Common.name %in% c("Killdeer", "Black Vulture", "Turkey Vulture", 
+                              "Osprey", "Northern Mockingbird", 
+                              "Brown Thrasher", "Belted Kingfisher")))
+  #select(-File, -file_name)
 
-write.csv(combined_data, "data/k9_analysis/2022_k9_totalobvs.csv")
 
+write.csv(k9_filtered, "data/2022_k9_filtered.csv")
+
+
+#START HERE FOR ANALYSIS
 ##############################
 
 # Analyzing number of hourly calls 
 
 
 ##############################
-combined_data <- read.csv("data/k9_analysis/2022_k9_totalobvs.csv") %>%
+
+# finding the total number of species observed
+species_cts <- k9_filtered |>
+  count(Common.name)|>
+  arrange(desc(n))
+k9_bins <- k9_total %>%
   rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
   mutate(hr_bin = ceiling(start/3600))
   
 
 # Creating a dataframe with the total number of vocalizations for each day at each hour
-hrly_sp_cts <- combined_data |>
-  count(julian_day, hr_bin, Common.name)
+hrly_sp_cts <- k9_total |>
+  count(julian_day, hr_bin, Common.name)|>
+  mutate(five_am = ifelse(hr_bin == 0, TRUE, FALSE))|>
+  mutate(six_am = ifelse(hr_bin == 1, TRUE, FALSE))|>
+  mutate(seven_am = ifelse(hr_bin == 2, TRUE, FALSE))|>
+  mutate(eight_am = ifelse(hr_bin == 3, TRUE, FALSE))
 
 # summarize(numSpp = n_distinct(Common.name))
 
-write.csv(hrly_data, "data/k9_analysis/hourlyVocalData.csv")
+write.csv(hrly_sp_cts, "data/k9_analysis/hourlyVocalData.csv")
 #######
 
 # Descriptive Statistics for Hourly Calls
@@ -68,19 +92,34 @@ hrly_data <- read.csv("data/k9_analysis/hourlyVocalData.csv")
 
 #Total Vocalizations 
 
-summary_total <- hrly_data |>
-  summarize("smallest number of vocalizations" = min(total),
-            "25% quantile" = quantile(total, probs=c(.25)),
-            "average number" = mean(total),
-            "median number" = median(total),
-            "75% quantile" = quantile(total, probs=c(.75)),
-            "largest number of vocalizations" = max(total),
-            variance=var(total))|>
+five_am_sum <- hrly_sp_cts |>
+  filter(five_am == TRUE)|>
+  summarize("smallest number of vocalizations" = min(n),
+            "25% quantile" = quantile(n, probs=c(.25)),
+            "average number" = mean(n),
+            "median number" = median(n),
+            "75% quantile" = quantile(n, probs=c(.75)),
+            "largest number of vocalizations" = max(n),
+            variance=var(n))|>
   glimpse()
 
+six_am_sum <- hrly_sp_cts |>
+  filter(six_am == TRUE)|>
+  summarize("smallest number of vocalizations" = min(n),
+            "25% quantile" = quantile(n, probs=c(.25)),
+            "average number" = mean(n),
+            "median number" = median(n),
+            "75% quantile" = quantile(n, probs=c(.75)),
+            "largest number of vocalizations" = max(n),
+            variance=var(n))|>
+  glimpse()
+  
 write.csv(summary_total, "data/k9_analysis/stats_results/summary_total.csv")
 
 #Three AM Vocalizations 
+fiveAM_counts <- hrly_sp_cts %>%
+  filter(hr_bin == 0) %>%
+  summarise(total = sum(n, na.rm = TRUE))
 
 summary_threeAM <- hrly_data |>
   summarize("smallest number of vocalizations" = min(three_am_total),
