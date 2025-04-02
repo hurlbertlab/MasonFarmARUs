@@ -1,0 +1,63 @@
+Scientific Name	Common Name
+Zenaida macroura	Mourning Dove
+Coccyzus americanus	Yellow-billed Cuckoo
+Chaetura pelagica	Chimney Swift
+Anas platyrhynchos	Mallard 
+Archilochus colubris	Ruby-throated Hummingbird
+Charadrius vociferus	Killdeer
+Ardea herodias	Great Blue Heron
+Coragyps atratus	Black Vulture
+Cathartes aura	Turkey Vulture
+Pandion haliaetus	Osprey
+Buteo lineatus	Red-shouldered Hawk
+Buteo jamaicensis	Red-tailed Hawk
+Strix varia	Barred Owl
+Megaceryle alcyon	Belted Kingfisher
+Melanerpes erythrocephalus	Red-headed Woodpecker
+Melanerpes carolinus	Red-bellied Woodpecker
+Dryobates pubescens	Downy Woodpecker
+Leuconotopicus villosus	Hairy Woodpecker
+Dryocopus pileatus	Pileated Woodpecker
+Colaptes auratus	Northern Flicker
+Contopus virens	Eastern Wood-Pewee
+Empidonax virescens	Acadian Flycatcher
+Sayornis phoebe	Eastern Phoebe
+Myiarchus crinitus	Great Crested Flycatcher
+Tyrannus tyrannus	Eastern Kingbird
+Vireo griseus	White-eyed Vireo
+Vireo flavifrons	Yellow-throated Vireo
+Vireo olivaceus	Red-eyed Vireo
+Cyanocitta cristata	Blue Jay
+Corvus brachyrhynchos	American Crow
+Corvus ossifragus	Fish Crow
+Poecile carolinensis	Carolina Chickadee
+Baeolophus bicolor	Tufted Titmouse
+Sitta carolinensis	White-breasted Nuthatch
+Sitta pusilla	Brown-headed Nuthatch
+Polioptila caerulea	Blue-gray Gnatcatcher
+Thryothorus ludovicianu	Carolina Wren
+Sturnus vulgaris	European Starling
+Toxostoma rufum	Brown Thrasher
+Mimus polyglottos	Northern Mockingbird
+Sialia sialis	Eastern Bluebird
+Turdus migratorius	American Robin 
+Carpodacus mexicanus	House Finch
+Spinus tristis	American Goldfinch
+Spizella passerina	Chipping Sparrow
+Pipilo erythrophthalmus	Eastern Towhee
+Agelaius phoeniceus	Red-winged Blackbird
+Molothrus ater	Brown-headed Cowbird
+Quiscalus quiscula	Common Grackle
+Seiurus aurocapilla	Ovenbird
+Mniotilta varia	Black-and-white Warbler
+Protonotaria citrea	Prothonotary Warbler 
+Geothylypis trichas	Common Yellowthroat
+Setophaga ruticilla	American Redstart
+Setophaga americana	Northern Parula
+Setophaga pinus	Pine Warbler
+Setophaga dominica	Yellow-throated Warbler
+Piranga rubra	Summer Tanager
+Piranga olivacea	Scarlet Tanager
+Cardinalis cardinalis	Northern Cardinal
+Passerina caerulea	Blue Grosbeak
+Passerina cyanea	Indigo Bunting
