@@ -149,55 +149,25 @@ dev.off()
 ```
 
 ```{r}
-# Plotting AF Detections per minute bin across the Summer 
-AF_dectVday <- AF_bins |>
-  group_by(julian_day, min_bin)|>
-  summarize(num_dect = n())
+png("C:/git/MasonFarmARUs/figures/AF_time_periods.png", width = 800, height = 600)
 
-filtered_one <- AF_dectVday[AF_dectVday$min_bin == 1, ]
-# Create the plot
-plot(filtered_one$julian_day,
-     filtered_one$num_dect, 
-     xlab = "Julian Day",
-     ylab = "Number of Vocalizations", 
-     ylim = c(0, 150), 
-     xlim = c(151, 201),
-     type = 'l',
-     col = 'lightgoldenrod', 
-     lwd = 2)
-filtered_two <- AF_dectVday[AF_dectVday$min_bin == 2, ]
-points(filtered_two$julian_day,
-     filtered_two$num_dect,
-       type = 'l',
-       col = "lightblue",
-       lwd = 2)
-filtered_three <- AF_dectVday[AF_dectVday$min_bin == 3, ]
-points(filtered_three$julian_day,
-     filtered_three$num_dect,
-       type = 'l',
-       col = "lightcoral",
-       lwd = 2)
-filtered_four <- AF_dectVday[AF_dectVday$min_bin == 4, ]
-points(filtered_four$julian_day,
-     filtered_four$num_dect,
-       type = 'l',
-       col = "lightpink",
-       lwd = 2)
-filtered_five <- AF_dectVday[AF_dectVday$min_bin == 5, ]
-points(filtered_five$julian_day,
-     filtered_five$num_dect,
-       type = 'l',
-       col = "lightpink",
-       lwd = 2)
-filtered_six <- AF_dectVday[AF_dectVday$min_bin == 6, ]
-points(filtered_six$julian_day,
-     filtered_six$num_dect,
-       type = 'l',
-       col = "lightpink",
-       lwd = 2)
+# The number of vocalizations per 15 minute time periods throughout the summer 
+library(ggplot2)
+ggplot(AF_dectVday, aes(x= julian_day, y= num_dect))+
+  geom_line(color = "lightgoldenrod", size = 1) +  # Line plot for each time period
+  labs(
+    x = "Julian Day",
+    y = "Number of Vocalizations",
+    title = "Number of Vocalizations Across 15 Minute Time Periods"
+  ) +
+  theme_minimal() +  # Clean theme
+  facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
+dev.off()
 ```
 
 ## Analyzing Summer Tanager Patterns
+
+The second most commonly detected bird was the Summer Tanager. The Summer Tanager was detected 6083 times.
 
 ## Analyzing Yellow-throated Vireo Patterns
 
