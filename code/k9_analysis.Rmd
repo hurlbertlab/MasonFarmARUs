@@ -68,7 +68,7 @@ k9_stats<- k9_total%>%
 
 ```{r plotting-jdVspecies, fig.path='figures/k9/'}
 
-png("C:/git/MasonFarmARUs/figures/jdVdect.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/jdVdect.png", width = 800, height = 600)
 
 #Mapping Julian Day Versus the Number of Observations for the top Seven Species
 filtered_AF <- species_day[species_day$Common.name == "Acadian Flycatcher", ]
@@ -118,10 +118,24 @@ legend("topright", legend = c("Acadian Flycatcher",
                               "Scarlet Tanager"),
        col = c("lightgoldenrod", "lightblue", "lightgreen", "lightcoral", "plum3", "royalblue"),
        lwd = 2)
-dev.off()
+#dev.off()
 ```
 
-## Analyzing Acadian Flycatcher Patterns 
+```{r}
+# Creating a dataframe with every species, min_bin, and date possible 
+all_julian <- min(k9_total$julian_day):max(k9_total$julian_day)
+species_vec <- speciesList$Common.Name
+julian_vec <- as.integer(all_julian)
+min_bin_vec <- ST_bins$min_bin
+
+all_combos <- expand.grid(
+  Bird.Call = species_vec,
+  julian_day = julian_vec,
+  min_bin = min_bin_vec
+)
+```
+
+## Analyzing Acadian Flycatcher Patterns
 
 Acadian Flycatcher was the species detected at Mason Farm the most. There were 7900 detections of Acadian Flycatchers from julian day 151 to 201.
 
@@ -130,7 +144,7 @@ Acadian Flycatcher was the species detected at Mason Farm the most. There were 7
 AF_bins <- k9_total |>
   filter(Common.name == "Acadian Flycatcher") |>
   rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
-  mutate(min_bin = ceiling(start/900))
+  mutate(min_bin = ceiling(end/900))
 
 ```
 
@@ -141,7 +155,7 @@ AF_minVdect <- AF_bins |>
   summarize(num_detections = n())
 
 png("C:/git/MasonFarmARUs/figures/AF_bar_all.png", width = 800, height = 600)
-ggplot(AF_minVdect, aes(x = min_bin , y = num_detections, fill)) +
+ggplot(ST_minVdect, aes(x = min_bin , y = num_detections, fill)) +
   geom_bar(stat = "identity") +
   labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Acadian Flycatcher Detections Per 10 Minute Intervals Across Summer 2022") 
   theme_minimal()
@@ -149,16 +163,28 @@ dev.off()
 ```
 
 ```{r}
+#Creating a dataframe with the counts of ST for each day
+AF_counts <- AF_bins |>
+  count(Common.name, julian_day, min_bin)|>
+  filter(Common.name == "Acadian Flycatcher")
+
+AF_dectVday <- all_combos |>
+  filter(Bird.Call == "Acadian Flycatcher") |>
+  left_join(AF_counts, by = c("Bird.Call"= "Common.name", "julian_day", "min_bin")) %>%
+  mutate(n = replace_na(n, 0))
+```
+
+```{r}
 png("C:/git/MasonFarmARUs/figures/AF_time_periods.png", width = 800, height = 600)
 
 # The number of vocalizations per 15 minute time periods throughout the summer 
 library(ggplot2)
-ggplot(AF_dectVday, aes(x= julian_day, y= num_dect))+
-  geom_line(color = "lightgoldenrod", size = 1) +  # Line plot for each time period
+ggplot(AF_dectVday, aes(x= julian_day, y= n))+
+  geom_line(color = "lightgoldenrod", linewidth = 1) +  # Line plot for each time period
   labs(
     x = "Julian Day",
     y = "Number of Vocalizations",
-    title = "Number of Vocalizations Across 15 Minute Time Periods"
+    title = "Acadian Flycatcher Vocalizations Across 15 Minute Time Periods"
   ) +
   theme_minimal() +  # Clean theme
   facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
@@ -169,10 +195,265 @@ dev.off()
 
 The second most commonly detected bird was the Summer Tanager. The Summer Tanager was detected 6083 times.
 
+```{r}
+# Creating 10 minute bins for the observations 
+ST_bins <- k9_total |>
+  filter(Common.name == "Summer Tanager") |>
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(min_bin = ceiling(end/900))
+```
+
+```{r}
+# Plotting number of detections per minute bin 
+ST_minVdect <- ST_bins |>
+  group_by(min_bin)|>
+  summarize(num_detections = n())
+
+png("C:/git/MasonFarmARUs/figures/ST_bar_all.png", width = 800, height = 600)
+ggplot(ST_minVdect, aes(x = min_bin , y = num_detections, fill)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Summer Tanagers Detections Per 10 Minute Intervals Across Summer 2022") 
+  theme_minimal()
+dev.off()
+```
+
+```{r}
+#Creating a dataframe with the counts of ST for each day
+ST_counts <- ST_bins |>
+  count(Common.name, julian_day, min_bin)|>
+  filter(Common.name == "Summer Tanager")
+
+ST_dectVday <- all_combos |>
+  filter(Bird.Call == "Summer Tanager") |>
+  left_join(ST_counts, by = c("Bird.Call"= "Common.name", "julian_day", "min_bin")) %>%
+  mutate(n = replace_na(n, 0))
+```
+
+```{r}
+png("C:/git/MasonFarmARUs/figures/ST_time_periods.png", width = 800, height = 600)
+
+# The number of vocalizations per 15 minute time periods throughout the summer 
+library(ggplot2)
+ggplot(ST_dectVday, aes(x= julian_day, y= n))+
+  geom_line(color = "lightblue", linewidth = 1) +  # Line plot for each time period
+  labs(
+    x = "Julian Day",
+    y = "Number of Vocalizations",
+    title = "Number of Summer Tanagers Vocalizations Across 15 Minute Time Periods"
+  ) +
+  theme_minimal() +  # Clean theme
+  facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
+dev.off()
+```
+
 ## Analyzing Yellow-throated Vireo Patterns
+
+```{r}
+# Creating 10 minute bins for the observations 
+YV_bins <- k9_total |>
+  filter(Common.name == "Yellow-throated Vireo") |>
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(min_bin = ceiling(end/900))
+```
+
+```{r}
+# Plotting number of detections per minute bin 
+YV_minVdect <- YV_bins |>
+  group_by(min_bin)|>
+  summarize(num_detections = n())
+
+png("C:/git/MasonFarmARUs/figures/YV_bar_all.png", width = 800, height = 600)
+ggplot(YV_minVdect, aes(x = min_bin , y = num_detections, fill)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Yellow-throated Vireo Detections Per 10 Minute Intervals Across Summer 2022") 
+  theme_minimal()
+dev.off()
+```
+
+```{r}
+#Creating a dataframe with the counts of YV for each day
+YV_counts <- YV_bins |>
+  count(Common.name, julian_day, min_bin)|>
+  filter(Common.name == "Yellow-throated Vireo")
+
+YV_dectVday <- all_combos |>
+  filter(Bird.Call == "Yellow-throated Vireo") |>
+  left_join(YV_counts, by = c("Bird.Call"= "Common.name", "julian_day", "min_bin")) %>%
+  mutate(n = replace_na(n, 0))
+```
+
+```{r}
+png("C:/git/MasonFarmARUs/figures/YV_time_periods.png", width = 800, height = 600)
+
+# The number of vocalizations per 15 minute time periods throughout the summer 
+library(ggplot2)
+ggplot(YV_dectVday, aes(x= julian_day, y= n))+
+  geom_line(color = "lightgreen", linewidth = 1) +  # Line plot for each time period
+  labs(
+    x = "Julian Day",
+    y = "Number of Vocalizations",
+    title = "Number of Yellow-throated Vireos Vocalizations Across 15 Minute Time Periods"
+  ) +
+  theme_minimal() +  # Clean theme
+  facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
+dev.off()
+```
 
 ## Analyzing Eastern Wood-Pewee Patterns
 
-## Analyzing Tufted Titmouse Patterns 
+```{r}
+# Creating 10 minute bins for the observations 
+EP_bins <- k9_total |>
+  filter(Common.name == "Eastern Wood-Pewee") |>
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(min_bin = ceiling(end/900))
+```
 
-## Analyzing Scarlet Tanager Patterns 
+```{r}
+# Plotting number of detections per minute bin 
+EP_minVdect <- EP_bins |>
+  group_by(min_bin)|>
+  summarize(num_detections = n())
+
+png("C:/git/MasonFarmARUs/figures/EP_bar_all.png", width = 800, height = 600)
+ggplot(EP_minVdect, aes(x = min_bin , y = num_detections, fill)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Eastern Wood-Pewee Detections Per 10 Minute Intervals Across Summer 2022") 
+  theme_minimal()
+dev.off()
+```
+
+```{r}
+#Creating a dataframe with the counts of YV for each day
+EP_counts <- EP_bins |>
+  count(Common.name, julian_day, min_bin)|>
+  filter(Common.name == "Eastern Wood-Pewee")
+
+EP_dectVday <- all_combos |>
+  filter(Bird.Call == "Eastern Wood-Pewee") |>
+  left_join(EP_counts, by = c("Bird.Call"= "Common.name", "julian_day", "min_bin")) %>%
+  mutate(n = replace_na(n, 0))
+```
+
+```{r}
+png("C:/git/MasonFarmARUs/figures/EP_time_periods.png", width = 800, height = 600)
+
+# The number of vocalizations per 15 minute time periods throughout the summer 
+library(ggplot2)
+ggplot(EP_dectVday, aes(x= julian_day, y= n))+
+  geom_line(color = "lightcoral", linewidth = 1) +  # Line plot for each time period
+  labs(
+    x = "Julian Day",
+    y = "Number of Vocalizations",
+    title = "Number of Eastern Wood-Pewee Vocalizations Across 15 Minute Time Periods"
+  ) +
+  theme_minimal() +  # Clean theme
+  facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
+dev.off()
+```
+
+## Analyzing Tufted Titmouse Patterns
+
+```{r}
+# Creating 10 minute bins for the observations 
+TT_bins <- k9_total |>
+  filter(Common.name == "Tufted Titmouse") |>
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(min_bin = ceiling(end/900))
+```
+
+```{r}
+# Plotting number of detections per minute bin 
+TT_minVdect <- TT_bins |>
+  group_by(min_bin)|>
+  summarize(num_detections = n())
+
+png("C:/git/MasonFarmARUs/figures/TT_bar_all.png", width = 800, height = 600)
+ggplot(TT_minVdect, aes(x = min_bin , y = num_detections, fill)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Tufted Titmouse Detections Per 10 Minute Intervals Across Summer 2022") 
+  theme_minimal()
+dev.off()
+```
+
+```{r}
+#Creating a dataframe with the counts of YV for each day
+TT_counts <- TT_bins |>
+  count(Common.name, julian_day, min_bin)|>
+  filter(Common.name == "Tufted Titmouse")
+
+TT_dectVday <- all_combos |>
+  filter(Bird.Call == "Tufted Titmouse") |>
+  left_join(TT_counts, by = c("Bird.Call"= "Common.name", "julian_day", "min_bin")) %>%
+  mutate(n = replace_na(n, 0))
+```
+
+```{r}
+png("C:/git/MasonFarmARUs/figures/TT_time_periods.png", width = 800, height = 600)
+
+# The number of vocalizations per 15 minute time periods throughout the summer 
+library(ggplot2)
+ggplot(TT_dectVday, aes(x= julian_day, y= n))+
+  geom_line(color = "plum3", linewidth = 1) +  # Line plot for each time period
+  labs(
+    x = "Julian Day",
+    y = "Number of Vocalizations",
+    title = "Number of Tufted Titmouse Vocalizations Across 15 Minute Time Periods"
+  ) +
+  theme_minimal() +  # Clean theme
+  facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
+dev.off()
+```
+
+## Analyzing Scarlet Tanager Patterns
+
+```{r}
+# Creating 10 minute bins for the observations 
+SCT_bins <- k9_total |>
+  filter(Common.name == "Scarlet Tanager") |>
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(min_bin = ceiling(end/900))
+```
+
+```{r}
+# Plotting number of detections per minute bin 
+SCT_minVdect <- SCT_bins |>
+  group_by(min_bin)|>
+  summarize(num_detections = n())
+
+png("C:/git/MasonFarmARUs/figures/SCT_bar_all.png", width = 800, height = 600)
+ggplot(SCT_minVdect, aes(x = min_bin , y = num_detections, fill)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Scarlet Tanager Detections Per 10 Minute Intervals Across Summer 2022") 
+  theme_minimal()
+dev.off()
+```
+
+```{r}
+#Creating a dataframe with the counts of YV for each day
+SCT_counts <- SCT_bins |>
+  count(Common.name, julian_day, min_bin)|>
+  filter(Common.name == "Scarlet Tanager")
+
+SCT_dectVday <- all_combos |>
+  filter(Bird.Call == "Scarlet Tanager") |>
+  left_join(SCT_counts, by = c("Bird.Call"= "Common.name", "julian_day", "min_bin")) %>%
+  mutate(n = replace_na(n, 0))
+```
+
+```{r}
+png("C:/git/MasonFarmARUs/figures/SCT_time_periods.png", width = 800, height = 600)
+
+# The number of vocalizations per 15 minute time periods throughout the summer 
+library(ggplot2)
+ggplot(SCT_dectVday, aes(x= julian_day, y= n))+
+  geom_line(color = "royalblue", linewidth = 1) +  # Line plot for each time period
+  labs(
+    x = "Julian Day",
+    y = "Number of Vocalizations",
+    title = "Number of Scarlet Tanager Vocalizations Across 15 Minute Time Periods"
+  ) +
+  theme_minimal() +  # Clean theme
+  facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
+dev.off()
+```
