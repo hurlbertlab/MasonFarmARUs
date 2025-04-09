@@ -126,7 +126,7 @@ legend("topright", legend = c("Acadian Flycatcher",
 all_julian <- min(k9_total$julian_day):max(k9_total$julian_day)
 species_vec <- speciesList$Common.Name
 julian_vec <- as.integer(all_julian)
-min_bin_vec <- ST_bins$min_bin
+min_bin_vec <- AF_bins$min_bin
 
 all_combos <- expand.grid(
   Bird.Call = species_vec,
@@ -154,12 +154,12 @@ AF_minVdect <- AF_bins |>
   group_by(min_bin)|>
   summarize(num_detections = n())
 
-png("C:/git/MasonFarmARUs/figures/AF_bar_all.png", width = 800, height = 600)
-ggplot(ST_minVdect, aes(x = min_bin , y = num_detections, fill)) +
+#png("C:/git/MasonFarmARUs/figures/AF_bar_all.png", width = 800, height = 600)
+ggplot(AF_minVdect, aes(x = min_bin , y = num_detections, fill)) +
   geom_bar(stat = "identity") +
   labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Acadian Flycatcher Detections Per 10 Minute Intervals Across Summer 2022") 
   theme_minimal()
-dev.off()
+#dev.off()
 ```
 
 ```{r}
@@ -175,7 +175,7 @@ AF_dectVday <- all_combos |>
 ```
 
 ```{r}
-png("C:/git/MasonFarmARUs/figures/AF_time_periods.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/AF_time_periods.png", width = 800, height = 600)
 
 # The number of vocalizations per 15 minute time periods throughout the summer 
 library(ggplot2)
@@ -188,7 +188,7 @@ ggplot(AF_dectVday, aes(x= julian_day, y= n))+
   ) +
   theme_minimal() +  # Clean theme
   facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
-dev.off()
+#dev.off()
 ```
 
 ## Analyzing Summer Tanager Patterns
@@ -209,12 +209,12 @@ ST_minVdect <- ST_bins |>
   group_by(min_bin)|>
   summarize(num_detections = n())
 
-png("C:/git/MasonFarmARUs/figures/ST_bar_all.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/ST_bar_all.png", width = 800, height = 600)
 ggplot(ST_minVdect, aes(x = min_bin , y = num_detections, fill)) +
   geom_bar(stat = "identity") +
   labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Summer Tanagers Detections Per 10 Minute Intervals Across Summer 2022") 
   theme_minimal()
-dev.off()
+#dev.off()
 ```
 
 ```{r}
@@ -230,7 +230,7 @@ ST_dectVday <- all_combos |>
 ```
 
 ```{r}
-png("C:/git/MasonFarmARUs/figures/ST_time_periods.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/ST_time_periods.png", width = 800, height = 600)
 
 # The number of vocalizations per 15 minute time periods throughout the summer 
 library(ggplot2)
@@ -243,7 +243,7 @@ ggplot(ST_dectVday, aes(x= julian_day, y= n))+
   ) +
   theme_minimal() +  # Clean theme
   facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
-dev.off()
+#dev.off()
 ```
 
 ## Analyzing Yellow-throated Vireo Patterns
@@ -262,12 +262,12 @@ YV_minVdect <- YV_bins |>
   group_by(min_bin)|>
   summarize(num_detections = n())
 
-png("C:/git/MasonFarmARUs/figures/YV_bar_all.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/YV_bar_all.png", width = 800, height = 600)
 ggplot(YV_minVdect, aes(x = min_bin , y = num_detections, fill)) +
   geom_bar(stat = "identity") +
   labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Yellow-throated Vireo Detections Per 10 Minute Intervals Across Summer 2022") 
   theme_minimal()
-dev.off()
+#dev.off()
 ```
 
 ```{r}
@@ -283,7 +283,7 @@ YV_dectVday <- all_combos |>
 ```
 
 ```{r}
-png("C:/git/MasonFarmARUs/figures/YV_time_periods.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/YV_time_periods.png", width = 800, height = 600)
 
 # The number of vocalizations per 15 minute time periods throughout the summer 
 library(ggplot2)
@@ -296,7 +296,7 @@ ggplot(YV_dectVday, aes(x= julian_day, y= n))+
   ) +
   theme_minimal() +  # Clean theme
   facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
-dev.off()
+#dev.off()
 ```
 
 ## Analyzing Eastern Wood-Pewee Patterns
@@ -315,12 +315,12 @@ EP_minVdect <- EP_bins |>
   group_by(min_bin)|>
   summarize(num_detections = n())
 
-png("C:/git/MasonFarmARUs/figures/EP_bar_all.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/EP_bar_all.png", width = 800, height = 600)
 ggplot(EP_minVdect, aes(x = min_bin , y = num_detections, fill)) +
   geom_bar(stat = "identity") +
   labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Eastern Wood-Pewee Detections Per 10 Minute Intervals Across Summer 2022") 
   theme_minimal()
-dev.off()
+#dev.off()
 ```
 
 ```{r}
@@ -336,7 +336,7 @@ EP_dectVday <- all_combos |>
 ```
 
 ```{r}
-png("C:/git/MasonFarmARUs/figures/EP_time_periods.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/EP_time_periods.png", width = 800, height = 600)
 
 # The number of vocalizations per 15 minute time periods throughout the summer 
 library(ggplot2)
@@ -349,7 +349,7 @@ ggplot(EP_dectVday, aes(x= julian_day, y= n))+
   ) +
   theme_minimal() +  # Clean theme
   facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
-dev.off()
+#dev.off()
 ```
 
 ## Analyzing Tufted Titmouse Patterns
@@ -368,12 +368,12 @@ TT_minVdect <- TT_bins |>
   group_by(min_bin)|>
   summarize(num_detections = n())
 
-png("C:/git/MasonFarmARUs/figures/TT_bar_all.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/TT_bar_all.png", width = 800, height = 600)
 ggplot(TT_minVdect, aes(x = min_bin , y = num_detections, fill)) +
   geom_bar(stat = "identity") +
   labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Tufted Titmouse Detections Per 10 Minute Intervals Across Summer 2022") 
   theme_minimal()
-dev.off()
+#dev.off()
 ```
 
 ```{r}
@@ -389,7 +389,7 @@ TT_dectVday <- all_combos |>
 ```
 
 ```{r}
-png("C:/git/MasonFarmARUs/figures/TT_time_periods.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/TT_time_periods.png", width = 800, height = 600)
 
 # The number of vocalizations per 15 minute time periods throughout the summer 
 library(ggplot2)
@@ -402,7 +402,7 @@ ggplot(TT_dectVday, aes(x= julian_day, y= n))+
   ) +
   theme_minimal() +  # Clean theme
   facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
-dev.off()
+#dev.off()
 ```
 
 ## Analyzing Scarlet Tanager Patterns
@@ -421,12 +421,12 @@ SCT_minVdect <- SCT_bins |>
   group_by(min_bin)|>
   summarize(num_detections = n())
 
-png("C:/git/MasonFarmARUs/figures/SCT_bar_all.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/SCT_bar_all.png", width = 800, height = 600)
 ggplot(SCT_minVdect, aes(x = min_bin , y = num_detections, fill)) +
   geom_bar(stat = "identity") +
   labs(x = "Ten Minute Interval", y = "Number of Detections", title = "Number of Scarlet Tanager Detections Per 10 Minute Intervals Across Summer 2022") 
   theme_minimal()
-dev.off()
+#dev.off()
 ```
 
 ```{r}
@@ -442,7 +442,7 @@ SCT_dectVday <- all_combos |>
 ```
 
 ```{r}
-png("C:/git/MasonFarmARUs/figures/SCT_time_periods.png", width = 800, height = 600)
+#png("C:/git/MasonFarmARUs/figures/SCT_time_periods.png", width = 800, height = 600)
 
 # The number of vocalizations per 15 minute time periods throughout the summer 
 library(ggplot2)
@@ -455,5 +455,5 @@ ggplot(SCT_dectVday, aes(x= julian_day, y= n))+
   ) +
   theme_minimal() +  # Clean theme
   facet_wrap(~min_bin, ncol = 3)  # Create facets with 3 columns
-dev.off()
+#dev.off()
 ```

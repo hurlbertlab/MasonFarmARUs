@@ -1,0 +1,59 @@
+---
+title: "Linear Regression Models k9 2022"
+author: "Grace Layman"
+date: "2025-04-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Linear Regression Models for K9 Stake 2022
+
+```{r}
+#This will be the linear regression model on the overall identifications.
+k9_wBins <- k9_total |>
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(min_bin = ceiling(end/900))
+lm_overallk9  <- lm(Confidence ~ min_bin + julian_day + julian_day*min_bin, data = k9_wBins)
+
+summary(lm_overallk9)
+```
+
+## Linear Models by Species 
+
+```{r}
+speciesList <- read.csv("C://git/MasonFarmARUs//data//species_list_csvCopy.csv")
+species_lm <- function(df = k9_wBins, 
+                       chosen_species = "Acadian Flycatcher"){
+  #filter to just the chosen species 
+  df<- df |>
+    filter(Common.name == chosen_species)
+  
+  #running the linear model 
+  m1 <- lm(Confidence ~ min_bin + julian_day + min_bin*julian_day, data = df)
+  if (interactive()) {
+    plot(x = df$julian_day, y = df$Confidence,
+         xlab = "Julian Day",
+         ylab = "Confidence Score",
+         main = paste("Julian Day vs. Confidence Scores for", chosen_species))
+  }
+  r_squared <- summary(m1)$r.squared
+  
+  return(m1)
+}
+
+
+```
+
+### Acadian Flycatcher 
+
+```{r}
+# Linear model for Acadian Flycatcher Observations 
+AF <- species_lm(k9_wBins, "Acadian Flycatcher")
+summary(AF)
+
+tided <- tidy(AF)|>
+  pivot
+```
