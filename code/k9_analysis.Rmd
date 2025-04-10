@@ -170,7 +170,7 @@ full_counts_clean <- full_counts |>
   distinct(Bird.Call, julian_day, min_bin, n, .keep_all = TRUE)
 ```
 
-### Acadian Flycatcher
+### Acadian Flycatcher Matrix
 
 ```{r}
 af_matrix <- full_counts_clean |>
@@ -216,6 +216,32 @@ axis(1, at = seq(0, 1, length.out = ncol(af_matrix_numeric)), labels = colnames(
 axis(2, at = seq(0, 1, length.out = nrow(af_matrix_numeric)), labels = rownames(af_matrix_numeric))
 # Add title and axis labels
 title(main = "Summer Tanager Observations", cex.main = 1.5)  # Main title
+mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+```
+
+## Yellow-throated Vireo Matrix
+
+```{r}
+yv_matrix<- full_counts_clean |>
+  filter(Bird.Call == "Yellow-throated Vireo") |>
+  select(-Bird.Call)|>
+  pivot_wider(
+    names_from = julian_day,
+    values_from = n
+  ) 
+
+yv_matrix_numeric <- st_matrix |>
+  column_to_rownames(var = "min_bin")|>
+  as.matrix()
+
+collist <- c(0.1)
+image(yv_matrix_numeric, axes = FALSE, col=collist, asp = 1)
+
+axis(1, at = seq(0, 1, length.out = ncol(af_matrix_numeric)), labels = colnames(af_matrix_numeric), las = 2)
+axis(2, at = seq(0, 1, length.out = nrow(af_matrix_numeric)), labels = rownames(af_matrix_numeric))
+# Add title and axis labels
+title(main = "Yellow-throated Vireo Observations", cex.main = 1.5)  # Main title
 mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
 mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
