@@ -133,9 +133,64 @@ all_combos <- expand.grid(
   julian_day = julian_vec,
   min_bin = min_bin_vec
 )
+
+target_species <- c(
+  "Acadian Flycatcher", 
+  "Summer Tanager", 
+  "Yellow-throated Vireo", 
+  "Eastern Wood-Pewee", 
+  "Tufted Titmouse", 
+  "Scarlet Tanager"
+)
 ```
 
-## Analyzing Acadian Flycatcher Patterns
+## Matrix Mapping
+
+```{r}
+day_mins<- k9_total |>
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(min_bin = ceiling(end/900))
+
+bird_counts <- day_mins |>
+  filter(Common.name %in% target_species)|>
+  count(Common.name, julian_day, min_bin)
+
+full_counts <- all_combos |>
+  filter(Bird.Call %in% target_species)|>
+  left_join(bird_counts, by = c("Bird.Call" = "Common.name", "julian_day", "min_bin")) |>
+  mutate(n = replace_na(n, 0))
+
+# Get unique combinations of Bird.Call, julian_day, min_bin, and n
+full_counts_clean <- full_counts |>
+  distinct(Bird.Call, julian_day, min_bin, n, .keep_all = TRUE)
+```
+
+### Acadian Flycatcher
+
+```{r}
+af_matrix <- full_counts_clean |>
+  filter(Bird.Call == "Acadian Flycatcher") |>
+  select(-Bird.Call)|>
+  pivot_wider(
+    names_from = julian_day,
+    values_from = n
+  ) 
+
+af_matrix_numeric <- af_matrix |>
+  column_to_rownames(var = "min_bin")|>
+  as.matrix()
+
+image(af_matrix_numeric, axes = FALSE)
+
+axis(1, at = seq(0, 1, length.out = ncol(af_matrix_numeric)), labels = colnames(af_matrix_numeric), las = 2)
+axis(2, at = seq(0, 1, length.out = nrow(af_matrix_numeric)), labels = rownames(af_matrix_numeric))
+# Add title and axis labels
+title(main = "Acadian Flycatcher Observations", cex.main = 1.5)  # Main title
+mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+```
+
+## Analyzing Acadian Flycatcher Pattern
 
 Acadian Flycatcher was the species detected at Mason Farm the most. There were 7900 detections of Acadian Flycatchers from julian day 151 to 201.
 
