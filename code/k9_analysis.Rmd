@@ -20,6 +20,7 @@ library(stringr)
 library(lubridate)
 library(ggplot2)
 library(tidyr)
+library(tibble)
 ```
 
 ```{r}
@@ -122,11 +123,18 @@ legend("topright", legend = c("Acadian Flycatcher",
 ```
 
 ```{r}
+# Full dataframe with minute bins 
+
+day_mins<- k9_total |>
+  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
+  mutate(min_bin = ceiling(end/900))
+
 # Creating a dataframe with every species, min_bin, and date possible 
+
 all_julian <- min(k9_total$julian_day):max(k9_total$julian_day)
 species_vec <- speciesList$Common.Name
 julian_vec <- as.integer(all_julian)
-min_bin_vec <- AF_bins$min_bin
+min_bin_vec <- day_mins$min_bin
 
 all_combos <- expand.grid(
   Bird.Call = species_vec,
@@ -147,9 +155,6 @@ target_species <- c(
 ## Matrix Mapping
 
 ```{r}
-day_mins<- k9_total |>
-  rename("start" = "Start..s.", "end" = "End..s.")|> # Comment this out if you have already run this line
-  mutate(min_bin = ceiling(end/900))
 
 bird_counts <- day_mins |>
   filter(Common.name %in% target_species)|>
@@ -186,6 +191,31 @@ axis(1, at = seq(0, 1, length.out = ncol(af_matrix_numeric)), labels = colnames(
 axis(2, at = seq(0, 1, length.out = nrow(af_matrix_numeric)), labels = rownames(af_matrix_numeric))
 # Add title and axis labels
 title(main = "Acadian Flycatcher Observations", cex.main = 1.5)  # Main title
+mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+```
+
+## Summer Tanager Matrix
+
+```{r}
+st_matrix<- full_counts_clean |>
+  filter(Bird.Call == "Summer Tanager") |>
+  select(-Bird.Call)|>
+  pivot_wider(
+    names_from = julian_day,
+    values_from = n
+  ) 
+
+st_matrix_numeric <- st_matrix |>
+  column_to_rownames(var = "min_bin")|>
+  as.matrix()
+
+image(st_matrix_numeric, axes = FALSE, col = blues9)
+
+axis(1, at = seq(0, 1, length.out = ncol(af_matrix_numeric)), labels = colnames(af_matrix_numeric), las = 2)
+axis(2, at = seq(0, 1, length.out = nrow(af_matrix_numeric)), labels = rownames(af_matrix_numeric))
+# Add title and axis labels
+title(main = "Summer Tanager Observations", cex.main = 1.5)  # Main title
 mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
 mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
