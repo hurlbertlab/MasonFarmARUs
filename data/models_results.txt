@@ -1,0 +1,119 @@
+--- Acadian Flycatcher Results ---
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-21.825 -10.066  -4.353   4.331 219.348 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 78.78494    9.90808   7.952 9.00e-15 ***
+julian_day  -0.43263    0.05393  -8.022 5.37e-15 ***
+min_bin      3.09253    1.00519   3.077  0.00219 ** 
+min_bin_sq  -0.18156    0.07527  -2.412  0.01616 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 19.64 on 608 degrees of freedom
+Multiple R-squared:  0.1167,	Adjusted R-squared:  0.1123 
+F-statistic: 26.77 on 3 and 608 DF,  p-value: 2.841e-16
+
+--------------------------------------------------------
+
+--- Summer Tanager ---
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-21.594 -11.712  -6.375  -0.640 250.843 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 86.69761   14.56263   5.953 4.44e-09 ***
+julian_day  -0.43332    0.07927  -5.467 6.70e-08 ***
+min_bin      0.38215    1.47740   0.259    0.796    
+min_bin_sq  -0.05498    0.11063  -0.497    0.619    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 28.86 on 608 degrees of freedom
+Multiple R-squared:  0.04866,	Adjusted R-squared:  0.04397 
+F-statistic: 10.37 on 3 and 608 DF,  p-value: 1.162e-06
+
+----------------------------------------------------------
+
+--- Yellow-throated Vireo ---
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-14.665  -6.927  -3.986   0.472 163.287 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 40.28881    8.14791   4.945 9.88e-07 ***
+julian_day  -0.23001    0.04435  -5.186 2.93e-07 ***
+min_bin      2.67000    0.82662   3.230  0.00130 ** 
+min_bin_sq  -0.18617    0.06190  -3.008  0.00274 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 16.15 on 608 degrees of freedom
+Multiple R-squared:  0.05837,	Adjusted R-squared:  0.05372 
+F-statistic: 12.56 on 3 and 608 DF,  p-value: 5.602e-08
+
+-------------------------------------------------------------
+
+--- Eastern Wood-Pewee ---
+Residuals:
+   Min     1Q Median     3Q    Max 
+-7.813 -4.484 -2.702 -0.423 75.193 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 18.24233    5.17895   3.522 0.000460 ***
+julian_day  -0.10792    0.02819  -3.828 0.000142 ***
+min_bin      1.62609    0.52541   3.095 0.002059 ** 
+min_bin_sq  -0.11037    0.03934  -2.805 0.005189 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 10.26 on 608 degrees of freedom
+Multiple R-squared:  0.03958,	Adjusted R-squared:  0.03484 
+F-statistic: 8.353 on 3 and 608 DF,  p-value: 1.894e-05
+
+--------------------------------------------------------------
+
+--- Tufted Titmouse ---
+Residuals:
+   Min     1Q Median     3Q    Max 
+-6.229 -2.745 -1.478 -0.100 80.352 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 12.87973    3.74080   3.443 0.000615 ***
+julian_day  -0.06859    0.02036  -3.369 0.000803 ***
+min_bin      0.04388    0.37951   0.116 0.907984    
+min_bin_sq   0.02208    0.02842   0.777 0.437473    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 7.414 on 608 degrees of freedom
+Multiple R-squared:  0.04174,	Adjusted R-squared:  0.03701 
+F-statistic: 8.827 on 3 and 608 DF,  p-value: 9.812e-06
+
+----------------------------------------------------------------
+
+--- Scarlet Tanager ---
+Residuals:
+   Min     1Q Median     3Q    Max 
+-5.372 -2.504 -1.237  0.031 54.661 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 18.33194    3.03526   6.040 2.69e-09 ***
+julian_day  -0.09353    0.01652  -5.661 2.32e-08 ***
+min_bin      0.50027    0.30793   1.625   0.1048    
+min_bin_sq  -0.05354    0.02306  -2.322   0.0206 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 6.016 on 608 degrees of freedom
+Multiple R-squared:  0.06915,	Adjusted R-squared:  0.06456 
+F-statistic: 15.06 on 3 and 608 DF,  p-value: 1.832e-09
+
+-----------------------------------------------------------------
