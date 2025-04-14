@@ -185,7 +185,7 @@ af_matrix_numeric <- af_matrix |>
   column_to_rownames(var = "min_bin")|>
   as.matrix()
 
-image(af_matrix_numeric, axes = FALSE, col = rev(heat.colors(256)))
+image(af_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white","yellow", "lightgoldenrod","lightgoldenrod3", "yellow4"))(256),)
 
 axis(1, at = seq(0, 1, length.out = ncol(af_matrix_numeric)), labels = colnames(af_matrix_numeric), las = 2)
 axis(2, at = seq(0, 1, length.out = nrow(af_matrix_numeric)), labels = rownames(af_matrix_numeric))
