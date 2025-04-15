@@ -168,12 +168,13 @@ full_counts <- all_combos |>
 # Get unique combinations of Bird.Call, julian_day, min_bin, and n
 full_counts_clean <- full_counts |>
   distinct(Bird.Call, julian_day, min_bin, n, .keep_all = TRUE)
-write.csv(full_counts_clean,"C:/git/MasonFarmARUs/data/full_counts_clean.csv")
+#write.csv(full_counts_clean,"C:/git/MasonFarmARUs/data/full_counts_clean.csv")
 ```
 
 ### Acadian Flycatcher Matrix
 
 ```{r}
+full_counts_clean <- read.csv("C:/git/MasonFarmARUs/data/full_counts_clean.csv")
 af_matrix <- full_counts_clean |>
   filter(Bird.Call == "Acadian Flycatcher") |>
   select(julian_day, min_bin, n)|>
@@ -188,7 +189,7 @@ image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","yellow", "light
 
 axis(1, at = seq(0, 1, length.out = ncol(af_matrix)), labels = colnames(af_matrix), las = 2)
 
-# axis(2, at = seq(0, 1, length.out = nrow(af_matrix)), labels = rownames(af_matrix)) #modify to put hour labels
+axis(2, at = seq(0, 1, length.out = nrow(af_matrix)), labels = rownames(af_matrix)) #modify to put hour labels
 # Add title and axis labels
 title(main = "Acadian Flycatcher Observations", cex.main = 1.5)  # Main title
 mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
@@ -340,7 +341,7 @@ af_matrix <- af_matrix |>
   column_to_rownames(var = "min_bin")|>
   as.matrix()
 
-image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","yellow", "lightgoldenrod","lightgoldenrod3", "yellow4"))(256),)
+image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","lightgoldenrod3"))(256),)
 
 axis(1, at = seq(0, 1, length.out = ncol(af_matrix)), labels = colnames(af_matrix), las = 2)
 axis(2, at = seq(0, 1, length.out = nrow(af_matrix)), labels = rownames(af_matrix))
