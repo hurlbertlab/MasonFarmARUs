@@ -3,6 +3,7 @@ library(ggplot2)
 library(dplyr)
 library(patchwork)
 
+full_counts_clean <- read.csv("C:/git/MasonFarmARUs/data/full_counts_clean.csv")
 full_counts_clean <- full_counts_clean |>
   mutate(min_bin_sq = min_bin^2)
 

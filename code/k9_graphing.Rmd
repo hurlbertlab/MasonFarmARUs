@@ -168,6 +168,7 @@ full_counts <- all_combos |>
 # Get unique combinations of Bird.Call, julian_day, min_bin, and n
 full_counts_clean <- full_counts |>
   distinct(Bird.Call, julian_day, min_bin, n, .keep_all = TRUE)
+write.csv(full_counts_clean,"C:/git/MasonFarmARUs/data/full_counts_clean.csv")
 ```
 
 ### Acadian Flycatcher Matrix
@@ -320,7 +321,7 @@ mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
 mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
 
-## Arranging these graphs into a panel figure 
+## Arranging these graphs into a panel figure
 
 ```{r}
 png("C:/git/MasonFarmARUs/figures/species_heatmaps.png", width = 800, height = 1200)
