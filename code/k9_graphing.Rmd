@@ -176,24 +176,23 @@ write.csv(full_counts_clean,"C:/git/MasonFarmARUs/data/full_counts_clean.csv")
 ```{r}
 af_matrix <- full_counts_clean |>
   filter(Bird.Call == "Acadian Flycatcher") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-af_matrix_numeric <- af_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
 
-image(af_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white","yellow", "lightgoldenrod","lightgoldenrod3", "yellow4"))(256),)
+image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","yellow", "lightgoldenrod","lightgoldenrod3", "yellow4"))(256))
 
-axis(1, at = seq(0, 1, length.out = ncol(af_matrix_numeric)), labels = colnames(af_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(af_matrix_numeric)), labels = rownames(af_matrix_numeric))
+axis(1, at = seq(0, 1, length.out = ncol(af_matrix)), labels = colnames(af_matrix), las = 2)
+
+# axis(2, at = seq(0, 1, length.out = nrow(af_matrix)), labels = rownames(af_matrix)) #modify to put hour labels
 # Add title and axis labels
 title(main = "Acadian Flycatcher Observations", cex.main = 1.5)  # Main title
 mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+#mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
 
 ## Summer Tanager Matrix
@@ -337,14 +336,14 @@ af_matrix <- full_counts_clean |>
     values_from = n
   ) 
 
-af_matrix_numeric <- af_matrix |>
+af_matrix <- af_matrix |>
   column_to_rownames(var = "min_bin")|>
   as.matrix()
 
-image(af_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white","yellow", "lightgoldenrod","lightgoldenrod3", "yellow4"))(256),)
+image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","yellow", "lightgoldenrod","lightgoldenrod3", "yellow4"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(af_matrix_numeric)), labels = colnames(af_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(af_matrix_numeric)), labels = rownames(af_matrix_numeric))
+axis(1, at = seq(0, 1, length.out = ncol(af_matrix)), labels = colnames(af_matrix), las = 2)
+axis(2, at = seq(0, 1, length.out = nrow(af_matrix)), labels = rownames(af_matrix))
 # Add title and axis labels
 title(main = "Acadian Flycatcher Observations", cex.main = 1.5)  # Main title
 mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
