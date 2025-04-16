@@ -171,10 +171,25 @@ full_counts_clean <- full_counts |>
 #write.csv(full_counts_clean,"C:/git/MasonFarmARUs/data/full_counts_clean.csv")
 ```
 
+### Matrix X & Y Labels Creation
+
+```{r}
+# Creating X Axis (Time of day) labels
+tick_y <- c(1, 2, 4, 6, 8, 10, 12)
+tick_at_y <- (tick_y -1)/ (ncol(af_matrix) -1)
+tick_labels_y <- c("5:45", "6:00", "6:30", "7:00", "7:30", "8:00", "8:30")
+
+tick_x <- c(3, 17, 33, 47, 51)
+tick_at_x <- (tick_x - 1)/ (nrow(af_matrix) - 1)
+tick_labels_x <- c( "June 1", "June 15", "July 1", "July 15", "July 19")
+```
+
 ### Acadian Flycatcher Matrix
 
 ```{r}
 full_counts_clean <- read.csv("C:/git/MasonFarmARUs/data/full_counts_clean.csv")
+full_counts_clean$min_bin <- as.character(full_counts_clean$min_bin)
+
 af_matrix <- full_counts_clean |>
   filter(Bird.Call == "Acadian Flycatcher") |>
   select(julian_day, min_bin, n)|>
@@ -184,171 +199,213 @@ af_matrix <- full_counts_clean |>
   ) |>
   select(-julian_day) |>
   as.matrix()
+rownames(af_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Acadian Flycatcher")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","yellow", "lightgoldenrod","lightgoldenrod3", "yellow4"))(256))
+par(mar = c(5, 5, 2, 8))
+image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","darkorange"))(256))
 
-axis(1, at = seq(0, 1, length.out = ncol(af_matrix)), labels = colnames(af_matrix), las = 2)
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
 
-axis(2, at = seq(0, 1, length.out = nrow(af_matrix)), labels = rownames(af_matrix)) #modify to put hour labels
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Acadian Flycatcher Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-#mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Acadian Flycatcher", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
 
 ## Summer Tanager Matrix
 
 ```{r}
-st_matrix<- full_counts_clean |>
+st_matrix <- full_counts_clean |>
   filter(Bird.Call == "Summer Tanager") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-st_matrix_numeric <- st_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(st_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Summer Tanager")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(st_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white", "lightblue", "skyblue2","skyblue3", "navy"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(st_matrix_numeric)), labels = colnames(st_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(st_matrix_numeric)), labels = rownames(st_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(st_matrix, axes = FALSE, col = colorRampPalette(c("white", "navy"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Summer Tanager Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Summer Tanager", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
 
 ## Yellow-throated Vireo Matrix
 
 ```{r}
-yv_matrix<- full_counts_clean |>
+yv_matrix <- full_counts_clean |>
   filter(Bird.Call == "Yellow-throated Vireo") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-yv_matrix_numeric <- yv_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(yv_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Yellow-throated Vireo")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(yv_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white","lightgreen", "mediumspringgreen", "green", "darkgreen"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(yv_matrix_numeric)), labels = colnames(yv_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(yv_matrix_numeric)), labels = rownames(yv_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(yv_matrix, axes = FALSE, col = colorRampPalette(c("white", "darkgreen"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Yellow-throated Vireo Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Yellow-throated Vireo", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
 
 ## Eastern Wood-Pewee Matrix
 
 ```{r}
-ep_matrix<- full_counts_clean |>
+ep_matrix <- full_counts_clean |>
   filter(Bird.Call == "Eastern Wood-Pewee") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-ep_matrix_numeric <- ep_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(ep_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Eastern Wood-Pewee")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(ep_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white","pink", "maroon1","maroon3","maroon4"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(ep_matrix_numeric)), labels = colnames(ep_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(ep_matrix_numeric)), labels = rownames(ep_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(ep_matrix, axes = FALSE, col = colorRampPalette(c("white", "maroon"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Eastern Wood-Pewee Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Eastern Wood-Pewee", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
 
 ## Tufted Titmouse Matrix
 
 ```{r}
-tt_matrix<- full_counts_clean |>
+tt_matrix <- full_counts_clean |>
   filter(Bird.Call == "Tufted Titmouse") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-tt_matrix_numeric <- tt_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(tt_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Tufted Titmouse")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(tt_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white", "plum2","plum", "purple","purple4"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(tt_matrix_numeric)), labels = colnames(tt_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(tt_matrix_numeric)), labels = rownames(tt_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(tt_matrix, axes = FALSE, col = colorRampPalette(c("white", "purple"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Tufted Titmouse Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Tufted Titmouse", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
 
 ## Scarlet Tanager Matrix
 
 ```{r}
-sct_matrix<- full_counts_clean |>
+sct_matrix <- full_counts_clean |>
   filter(Bird.Call == "Scarlet Tanager") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-sct_matrix_numeric <- sct_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(sct_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Scarlet Tanager")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(sct_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white", "turquoise1", "turquoise","turquoise3", "turquoise4"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(tt_matrix_numeric)), labels = colnames(sct_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(sct_matrix_numeric)), labels = rownames(sct_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(sct_matrix, axes = FALSE, col = colorRampPalette(c("white", "royalblue"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Scarlet Tanager Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Scarlet Tanager", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 ```
 
 ## Arranging these graphs into a panel figure
 
 ```{r}
-png("C:/git/MasonFarmARUs/figures/species_heatmaps.png", width = 800, height = 1200)
+png("C:/git/MasonFarmARUs/figures/species_matrices.png", width = 800, height = 1200)
 
 par(mfrow = c(3, 2), mar = c(5, 4, 4, 4))
 
 # Acadian flycatcher 
 af_matrix <- full_counts_clean |>
   filter(Bird.Call == "Acadian Flycatcher") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-af_matrix <- af_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(af_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Acadian Flycatcher")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","lightgoldenrod3"))(256),)
+par(mar = c(5, 5, 2, 8))
+image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","darkorange"))(256))
 
-axis(1, at = seq(0, 1, length.out = ncol(af_matrix)), labels = colnames(af_matrix), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(af_matrix)), labels = rownames(af_matrix))
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Acadian Flycatcher Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Acadian Flycatcher", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+
 
 # Summer Tanager 
 
@@ -360,106 +417,144 @@ st_matrix<- full_counts_clean |>
     values_from = n
   ) 
 
-st_matrix_numeric <- st_matrix |>
-  column_to_rownames(var = "min_bin")|>
+st_matrix <- full_counts_clean |>
+  filter(Bird.Call == "Summer Tanager") |>
+  select(julian_day, min_bin, n)|>
+  pivot_wider(
+    names_from = min_bin,
+    values_from = n
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(st_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Summer Tanager")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(st_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white", "lightblue", "skyblue2","skyblue3", "navy"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(st_matrix_numeric)), labels = colnames(st_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(st_matrix_numeric)), labels = rownames(st_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(st_matrix, axes = FALSE, col = colorRampPalette(c("white", "navy"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Summer Tanager Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Summer Tanager", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 
 # Yellow-throated Vireo 
-yv_matrix<- full_counts_clean |>
+yv_matrix <- full_counts_clean |>
   filter(Bird.Call == "Yellow-throated Vireo") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-yv_matrix_numeric <- yv_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(yv_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Yellow-throated Vireo")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(yv_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white","lightgreen", "mediumspringgreen", "green", "darkgreen"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(yv_matrix_numeric)), labels = colnames(yv_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(yv_matrix_numeric)), labels = rownames(yv_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(yv_matrix, axes = FALSE, col = colorRampPalette(c("white", "darkgreen"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Yellow-throated Vireo Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Yellow-throated Vireo", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 
 # Eastern Wood-Pewee
-ep_matrix<- full_counts_clean |>
+ep_matrix <- full_counts_clean |>
   filter(Bird.Call == "Eastern Wood-Pewee") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-ep_matrix_numeric <- ep_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(ep_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Eastern Wood-Pewee")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(ep_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white","pink", "maroon1","maroon3","maroon4"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(ep_matrix_numeric)), labels = colnames(ep_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(ep_matrix_numeric)), labels = rownames(ep_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(ep_matrix, axes = FALSE, col = colorRampPalette(c("white", "maroon"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Eastern Wood-Pewee Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Eastern Wood-Pewee", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 
 # Tufted Titmouse 
-tt_matrix<- full_counts_clean |>
+tt_matrix <- full_counts_clean |>
   filter(Bird.Call == "Tufted Titmouse") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-tt_matrix_numeric <- tt_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(tt_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Tufted Titmouse")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(tt_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white", "plum2","plum", "purple","purple4"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(tt_matrix_numeric)), labels = colnames(tt_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(tt_matrix_numeric)), labels = rownames(tt_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(tt_matrix, axes = FALSE, col = colorRampPalette(c("white", "purple"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Tufted Titmouse Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Tufted Titmouse", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 
 # Scarlet Tanager 
-sct_matrix<- full_counts_clean |>
+sct_matrix <- full_counts_clean |>
   filter(Bird.Call == "Scarlet Tanager") |>
-  select(-Bird.Call)|>
+  select(julian_day, min_bin, n)|>
   pivot_wider(
-    names_from = julian_day,
+    names_from = min_bin,
     values_from = n
-  ) 
-
-sct_matrix_numeric <- sct_matrix |>
-  column_to_rownames(var = "min_bin")|>
+  ) |>
+  select(-julian_day) |>
   as.matrix()
+rownames(sct_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Scarlet Tanager")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
 
-image(sct_matrix_numeric, axes = FALSE, col = colorRampPalette(c("white", "turquoise1", "turquoise","turquoise3", "turquoise4"))(256),)
 
-axis(1, at = seq(0, 1, length.out = ncol(tt_matrix_numeric)), labels = colnames(sct_matrix_numeric), las = 2)
-axis(2, at = seq(0, 1, length.out = nrow(sct_matrix_numeric)), labels = rownames(sct_matrix_numeric))
+par(mar = c(5, 5, 2, 8))
+image(sct_matrix, axes = FALSE, col = colorRampPalette(c("white", "royalblue"))(256),)
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
 # Add title and axis labels
-title(main = "Scarlet Tanager Observations", cex.main = 1.5)  # Main title
-mtext("Julian Day", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("15 minute intervals", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Scarlet Tanager", cex.main = 1.5)  # Main title
+mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
 
 dev.off()
 ```
