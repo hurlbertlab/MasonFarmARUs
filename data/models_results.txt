@@ -36,6 +36,23 @@ Residual standard error: 28.86 on 608 degrees of freedom
 Multiple R-squared:  0.04866,	Adjusted R-squared:  0.04397 
 F-statistic: 10.37 on 3 and 608 DF,  p-value: 1.162e-06
 
+----Summer Tanager w/0 min_bin_sq----
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-22.602 -11.786  -6.406  -0.939 250.825 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 88.36532   14.16193   6.240 8.21e-10 ***
+julian_day  -0.43332    0.07922  -5.470 6.58e-08 ***
+min_bin     -0.33258    0.33778  -0.985    0.325    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 28.85 on 609 degrees of freedom
+Multiple R-squared:  0.04828,	Adjusted R-squared:  0.04515 
+F-statistic: 15.45 on 2 and 609 DF,  p-value: 2.862e-07
+
 ----------------------------------------------------------
 
 --- Yellow-throated Vireo ---
@@ -95,7 +112,23 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Residual standard error: 7.414 on 608 degrees of freedom
 Multiple R-squared:  0.04174,	Adjusted R-squared:  0.03701 
 F-statistic: 8.827 on 3 and 608 DF,  p-value: 9.812e-06
+---------------------------------------------------------------
+---Tufted Titmouse w/o min_bin_sq---
+Residuals:
+   Min     1Q Median     3Q    Max 
+-5.824 -2.789 -1.478 -0.074 80.536 
 
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 12.20994    3.63893   3.355 0.000842 ***
+julian_day  -0.06859    0.02035  -3.370 0.000800 ***
+min_bin      0.33093    0.08679   3.813 0.000151 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 7.412 on 609 degrees of freedom
+Multiple R-squared:  0.04078,	Adjusted R-squared:  0.03763 
+F-statistic: 12.95 on 2 and 609 DF,  p-value: 3.116e-06
 ----------------------------------------------------------------
 
 --- Scarlet Tanager ---
