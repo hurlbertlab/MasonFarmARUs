@@ -16,6 +16,15 @@ lm_model <- function(species_name, data){
   return(summary(model))
 }
 
+lm_model_no_signif <- function(species_name, data){
+  species_data <- data |>
+    filter(Bird.Call == species_name) 
+  
+  model <- lm(n ~ julian_day + min_bin, data = species_data)
+  
+  return(summary(model))
+}
+
 # Acadian Flycatcher
 AF <- lm_model("Acadian Flycatcher", full_counts_clean)
 AF
@@ -75,6 +84,8 @@ ST_jd<-ggplot(full_counts_clean |>
   ) +
   theme_minimal()
 
+ST_no_min <- lm_model_no_signif("Summer Tanager", full_counts_clean)
+ST_no_min
 
 #Yellow-throated Vireo
 YV <- lm_model("Yellow-throated Vireo", full_counts_clean)
@@ -118,7 +129,7 @@ EP_time <- ggplot(full_counts_clean |>
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), color = "lightcoral", se = FALSE) +
   labs(title = "Effect of Time of Day on Eastern Wood-Pewee Counts",
        x = "Time of Day (15-min bins)",
-       y = "Detection Count")+
+       y = "Vocalization Count")+
   theme_minimal()
 
 #julian day effects
@@ -129,15 +140,18 @@ EP_jd <- ggplot(full_counts_clean |>
   geom_smooth(method = "lm", se = TRUE, color = "maroon") +
   labs(
     title = "Seasonal Trend in Detections",
-    subtitle = "Yellow-throated Vireo - Julian Day vs Detection Count",
+    subtitle = "Yellow-throated Vireo - Julian Day vs Vocalization",
     x = "Julian Day",
-    y = "Detection Count"
+    y = "Vocalization Count"
   ) +
   theme_minimal()
 
 #Tufted Titmouse
 TT <- lm_model("Tufted Titmouse", full_counts_clean)
 TT
+
+TT_no_min <- lm_model_no_signif("Tufted Titmouse", full_counts_clean)
+TT_no_min
 
 # time of day effects 
 TT_time <- ggplot(full_counts_clean |>
@@ -147,7 +161,7 @@ TT_time <- ggplot(full_counts_clean |>
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), color = "plum3", se = FALSE) +
   labs(title = "Effect of Time of Day on Tufted Titmouse Counts",
        x = "Time of Day (15-min bins)",
-       y = "Detection Count")+
+       y = "Vocalization Count")+
   theme_minimal()
 
 #Julian Day Effects 
@@ -157,10 +171,10 @@ TT_jd <-ggplot(full_counts_clean |>
   geom_point(alpha = 0.4, color = "skyblue2") +
   geom_smooth(method = "lm", se = TRUE, color = "purple4") +
   labs(
-    title = "Seasonal Trend in Detections",
-    subtitle = "Tufted Titmouse - Julian Day vs Detection Count",
+    title = "Seasonal Trend in Vocalizations",
+    subtitle = "Tufted Titmouse - Julian Day vs Vocalization Count",
     x = "Julian Day",
-    y = "Detection Count"
+    y = "Vocalization Count"
   ) +
   theme_minimal()
 
@@ -176,7 +190,7 @@ SCT_time <- ggplot(full_counts_clean |>
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), color = "royalblue", se = FALSE) +
   labs(title = "Effect of Time of Day on Scarlet Tanager Counts",
        x = "Time of Day (15-min bins)",
-       y = "Detection Count")+
+       y = "Vocalization Count")+
   theme_minimal()
 
 #julian day effects
@@ -210,4 +224,16 @@ png("C:/git/MasonFarmARUs/figures/linear_models2.png", width = 800, height = 120
 layout1 <- (ST_time | ST_jd ) / ( TT_time| TT_jd) / (SCT_time | SCT_jd)
 layout1 + plot_annotation(title = "Bird Detection Patterns",
                           subtitle = "By Species Across Julian Day and Time of Day")
+dev.off()
+
+
+##################################
+
+# Creating a smaller graph to include in results
+
+##################################
+# Eastern Wood-Pewee (min sig) & Scarlet Tanager (min not sig)
+png("C:/git/MasonFarmARUs/figures/linear_models_ex.png", width = 800, height = 800)
+layout2 <- (EP_time | EP_jd) / (TT_time | TT_jd)
+layout2 + plot_annotation()
 dev.off()
