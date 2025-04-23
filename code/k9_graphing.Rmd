@@ -69,57 +69,75 @@ k9_stats<- k9_total%>%
 
 ```{r plotting-jdVspecies, fig.path='figures/k9/'}
 
-#png("C:/git/MasonFarmARUs/figures/jdVdect.png", width = 800, height = 600)
-
-#Mapping Julian Day Versus the Number of Observations for the top Seven Species
+png("C:/git/MasonFarmARUs/figures/jdVdect.png", width = 1200, height =1000)
+par(mar = c(5, 5, 4, 2) + 2.3,
+     mgp = c(4.1, 1, 0))
+# Mapping Julian Day Versus the Number of Observations for the top Seven Species
 filtered_AF <- species_day[species_day$Common.name == "Acadian Flycatcher", ]
 plot(filtered_AF$julian_day,
      filtered_AF$n, 
-     xlab = "Julian Day",
+     xlab = "Day of Year (DOY)",
      ylab = "Number of Vocalizations", 
-     ylim = c(0, 1000), xlim = c(151,201),
+     ylim = c(0, 1000), 
+     xlim = c(151, 201),
      type = 'l',
      col = 'lightgoldenrod', 
-     lwd = 2)
+     lwd = 2,
+     xaxt = 'n',
+     cex.lab = 3.0,
+     cex.axis = 2.5)  # This suppresses the default x-axis
+
+# Add custom x-axis
+#axis(1, at = seq(151, 201, by = 10), labels = seq(151, 201, by = 10), cex.axis=2.5)
+# Or for month-day labels:
+axis(1, at = c(152, 167, 182, 197), labels = c("Jun-1", "Jun-16", "Jul-1", "Jul-16"), cex.axis=2.5)
+
 filtered_ST <- species_day[species_day$Common.name == "Summer Tanager", ]
 points(filtered_ST$julian_day, 
        filtered_ST$n,
        type = 'l',
        col = "lightblue",
        lwd = 2)
+
 filtered_YV <- species_day[species_day$Common.name == "Yellow-throated Vireo", ]
 points(filtered_YV$julian_day, 
        filtered_YV$n,
        type = 'l',
        col = "lightgreen",
        lwd = 2)
+
 filtered_EP <- species_day[species_day$Common.name == "Eastern Wood-Pewee", ]
 points(filtered_EP$julian_day, 
        filtered_EP$n,
        type = 'l',
        col = "lightcoral",
        lwd = 2)
+
 filtered_TT <- species_day[species_day$Common.name == "Tufted Titmouse", ]
 points(filtered_TT$julian_day, 
        filtered_TT$n,
        type = 'l',
        col = "plum3",
        lwd = 2)
+
 filtered_SCT <- species_day[species_day$Common.name == "Scarlet Tanager", ]
 points(filtered_SCT$julian_day, 
        filtered_SCT$n,
        type = 'l',
        col = "royalblue",
        lwd = 2)
-legend("topright", legend = c("Acadian Flycatcher",
-                              "Summer Tanager",
-                              "Yellow-throated Vireo",
-                              "Eastern Wood-Pewee",
-                              "Tufted Titmouse",
-                              "Scarlet Tanager"),
+
+legend("topright", 
+       legend = c("Acadian Flycatcher",
+                  "Summer Tanager",
+                  "Yellow-throated Vireo",
+                  "Eastern Wood-Pewee",
+                  "Tufted Titmouse",
+                  "Scarlet Tanager"),
        col = c("lightgoldenrod", "lightblue", "lightgreen", "lightcoral", "plum3", "royalblue"),
-       lwd = 2)
-#dev.off()
+       lwd = 2,
+       cex = 2.0)
+dev.off()
 ```
 
 ```{r}
@@ -190,31 +208,56 @@ tick_labels_x <- c( "June 1", "June 15", "July 1", "July 15", "July 19")
 full_counts_clean <- read.csv("C:/git/MasonFarmARUs/data/full_counts_clean.csv")
 full_counts_clean$min_bin <- as.character(full_counts_clean$min_bin)
 
+png("C:/git/MasonFarmARUs/figures/af_test.png", width = 1200, height =1000)
+# Set graphical parameters to match your line plot style
+par(mar = c(12, 12, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(5, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
+# Create matrix (keeping your existing data wrangling)
 af_matrix <- full_counts_clean |>
   filter(Bird.Call == "Acadian Flycatcher") |>
-  select(julian_day, min_bin, n)|>
+  select(julian_day, min_bin, n) |>
   pivot_wider(
     names_from = min_bin,
     values_from = n
   ) |>
   select(-julian_day) |>
   as.matrix()
-rownames(af_matrix) <- full_counts_clean|>
-  filter(Bird.Call == "Acadian Flycatcher")|>
-  select(julian_day)|>
-  distinct()|>
+
+rownames(af_matrix) <- full_counts_clean |>
+  filter(Bird.Call == "Acadian Flycatcher") |>
+  select(julian_day) |>
+  distinct() |>
   pull(julian_day)
 
-par(mar = c(5, 5, 2, 8))
-image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","darkorange"))(256))
+# Create heatmap plot
+image(af_matrix, 
+      axes = FALSE, 
+      col = colorRampPalette(c("white", "darkorange"))(256))
 
-axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
 
-axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
-# Add title and axis labels
-title(main = "Acadian Flycatcher", cex.main = 1.5)  # Main title
-mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Acadian Flycatcher", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 10, cex = 3.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 3.0, font=2)  # Increased line pushes label left
+
+dev.off()
 ```
 
 ## Summer Tanager Matrix

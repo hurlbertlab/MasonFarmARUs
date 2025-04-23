@@ -36,7 +36,7 @@ species_lm <- function(df = k9_wBins,
   if (interactive()) {
     plot(x = df$julian_day, y = df$Confidence,
          xlab = "Julian Day",
-         ylab = "Confidengetwd()ce Score",
+         ylab = "Confidence Score",
          main = paste("Julian Day vs. Confidence Scores for", chosen_species))
   }
   r_squared <- summary(m1)$r.squared
