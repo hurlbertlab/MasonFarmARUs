@@ -41,40 +41,63 @@ AF_time <- ggplot(full_counts_clean |>
        aes(x = min_bin, y = n)) +
   geom_point(alpha = 0.2) +
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), color = "lightgoldenrod", se = FALSE) +
-  labs(title = "Effect of Time of Day on Acadian Flycatcher Counts",
-       x = "Time of Day (15-min bins)",
-       y = "Detection Count")+
+  scale_x_continuous(breaks = tick_y, labels = tick_labels_y)+
+  labs(title = "Acadian Flycatcher",
+       x = "Time of Day",
+       y = "Vocalization Count")+
   theme_minimal()
+AF_time_effects <- AF_time + theme(axis.title.x = element_text(size = 16),
+                                       axis.title.y = element_text(size = 16),
+                                       plot.title = element_text(size = 20),
+                                       axis.text.x = element_text(size = 12),
+                                       axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+AF_time_effects
+  
 
 #Julian Day Effects
 AF_jd<-ggplot(full_counts_clean |>
          filter(Bird.Call == "Acadian Flycatcher"),
          aes(x = julian_day, y = n))+
          geom_point(alpha = 0.4, color = "skyblue2") +
-           geom_smooth(method = "lm", se = TRUE, color = "lightgoldenrod") +
+          geom_smooth(method = "lm", se = TRUE, color = "lightgoldenrod") +
+  scale_x_continuous(breaks = tick_x, labels = tick_labels_x)+
            labs(
-             title = "Seasonal Trend in Detections",
-             subtitle = "Acadian Flycatcher - Julian Day vs Detection Count",
-             x = "Julian Day",
-             y = "Detection Count"
+             title = "Acadian Flycatcher",
+             x = "DOY",
+             y = "Vocalization Count"
            ) +
            theme_minimal()
 
-
+AF_jd_effects <- AF_jd + theme(axis.title.x = element_text(size = 16),
+                                  axis.title.y = element_text(size = 16),
+                                  plot.title = element_text(size = 20),
+                                  axis.text.x = element_text(size = 12),
+                                  axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+AF_jd_effects
 #Summer Tanager
 ST <- lm_model("Summer Tanager", full_counts_clean)
 ST
 
 # Time of day effects 
 ST_time <- ggplot(full_counts_clean |>
-         filter(Bird.Call == "Summer Tanager"), 
-       aes(x = min_bin, y = n)) +
+                    filter(Bird.Call == "Summer Tanager"), 
+                  aes(x = min_bin, y = n)) +
   geom_point(alpha = 0.2) +
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), color = "lightblue", se = FALSE) +
-  labs(title = "Effect of Time of Day on Summer Tanager Counts",
-       x = "Time of Day (15-min bins)",
-       y = "Detection Count")+ 
+  scale_x_continuous(breaks = tick_y, labels = tick_labels_y)+
+  labs(title = "Summer Tanager",
+       x = "Time of Day",
+       y = "Vocalization Count")+
   theme_minimal()
+ST_time_effects <- ST_time + theme(axis.title.x = element_text(size = 16),
+                                   axis.title.y = element_text(size = 16),
+                                   plot.title = element_text(size = 20),
+                                   axis.text.x = element_text(size = 12),
+                                   axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+ST_time_effects
 
 #Julian Day effects
 ST_jd<-ggplot(full_counts_clean |>
@@ -98,16 +121,23 @@ YV <- lm_model("Yellow-throated Vireo", full_counts_clean)
 YV
 
 #Time of Day Effects
-YV_time <- ggplot(full_counts_clean |>
-         filter(Bird.Call == "Yellow-throated Vireo"), 
-       aes(x = min_bin, y = n)) +
+yv_time <- ggplot(full_counts_clean |>
+                    filter(Bird.Call == "Yellow-throated Vireo"), 
+                  aes(x = min_bin, y = n)) +
   geom_point(alpha = 0.2) +
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), color = "lightgreen", se = FALSE) +
-  labs(title = "Effect of Time of Day on Yellow-throated Vireo Counts",
-       x = "Time of Day (15-min bins)",
-       y = "Detection Count")+
+  scale_x_continuous(breaks = tick_y, labels = tick_labels_y)+
+  labs(title = "Yellow-throated Vireo",
+       x = "Time of Day",
+       y = "Vocalization Count")+
   theme_minimal()
-
+yv_time_effects <- yv_time + theme(axis.title.x = element_text(size = 16),
+                                   axis.title.y = element_text(size = 16),
+                                   plot.title = element_text(size = 20),
+                                   axis.text.x = element_text(size = 12),
+                                   axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+yv_time_effects
 #Julian Day effects
 YV_jd <- ggplot(full_counts_clean |>
          filter(Bird.Call == "Yellow-throated Vireo"), 
@@ -128,15 +158,23 @@ EP <- lm_model("Eastern Wood-Pewee", full_counts_clean)
 EP
 
 #Time of Day effects
-EP_time <- ggplot(full_counts_clean |>
-         filter(Bird.Call == "Eastern Wood-Pewee"), 
-       aes(x = min_bin, y = n)) +
+ep_time <- ggplot(full_counts_clean |>
+                    filter(Bird.Call == "Eastern Wood-Pewee"), 
+                  aes(x = min_bin, y = n)) +
   geom_point(alpha = 0.2) +
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), color = "lightcoral", se = FALSE) +
-  labs(title = "Effect of Time of Day on Eastern Wood-Pewee Counts",
-       x = "Time of Day (15-min bins)",
+  scale_x_continuous(breaks = tick_y, labels = tick_labels_y)+
+  labs(title = "Eastern Wood-Pewee",
+       x = "Time of Day",
        y = "Vocalization Count")+
   theme_minimal()
+ep_time_effects <- ep_time + theme(axis.title.x = element_text(size = 16),
+                                   axis.title.y = element_text(size = 16),
+                                   plot.title = element_text(size = 20),
+                                   axis.text.x = element_text(size = 12),
+                                   axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+ep_time_effects
 
 #julian day effects
 EP_jd <- ggplot(full_counts_clean |>
@@ -160,15 +198,23 @@ TT_no_min <- lm_model_no_signif("Tufted Titmouse", full_counts_clean)
 TT_no_min
 
 # time of day effects 
-TT_time <- ggplot(full_counts_clean |>
-         filter(Bird.Call == "Tufted Titmouse"), 
-       aes(x = min_bin, y = n)) +
+tt_time <- ggplot(full_counts_clean |>
+                    filter(Bird.Call == "Tufted Titmouse"), 
+                  aes(x = min_bin, y = n)) +
   geom_point(alpha = 0.2) +
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), color = "plum3", se = FALSE) +
-  labs(title = "Effect of Time of Day on Tufted Titmouse Counts",
-       x = "Time of Day (15-min bins)",
+  scale_x_continuous(breaks = tick_y, labels = tick_labels_y)+
+  labs(title = "Tufted Titmouse",
+       x = "Time of Day",
        y = "Vocalization Count")+
   theme_minimal()
+tt_time_effects <- tt_time + theme(axis.title.x = element_text(size = 16),
+                                   axis.title.y = element_text(size = 16),
+                                   plot.title = element_text(size = 20),
+                                   axis.text.x = element_text(size = 12),
+                                   axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+tt_time_effects
 
 #Julian Day Effects 
 TT_jd <-ggplot(full_counts_clean |>
