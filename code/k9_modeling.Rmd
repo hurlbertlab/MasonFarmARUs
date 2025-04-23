@@ -21,7 +21,7 @@ lm_overallk9  <- lm(Confidence ~ min_bin + julian_day + julian_day*min_bin, data
 summary(lm_overallk9)
 ```
 
-## Linear Models by Species 
+## Linear Models by Species
 
 ```{r}
 speciesList <- read.csv("C://git/MasonFarmARUs//data//species_list_csvCopy.csv")
@@ -47,7 +47,7 @@ species_lm <- function(df = k9_wBins,
 
 ```
 
-### Acadian Flycatcher 
+### Acadian Flycatcher
 
 ```{r}
 # Linear model for Acadian Flycatcher Observations 
