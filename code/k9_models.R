@@ -25,6 +25,12 @@ lm_model_no_signif <- function(species_name, data){
   return(summary(model))
 }
 
+# Creating X Axis (Time of day) labels
+tick_y <- c(1, 2, 4, 6, 8, 10, 12)
+tick_labels_y <- c("5:45", "6:00", "6:30", "7:00", "7:30", "8:00", "8:30")
+
+tick_x <- c(152, 167, 182, 197, 213)
+tick_labels_x <- c("June 1", "June 16", "July 1", "July 16", "August 1")
 # Acadian Flycatcher
 AF <- lm_model("Acadian Flycatcher", full_counts_clean)
 AF
@@ -188,10 +194,19 @@ SCT_time <- ggplot(full_counts_clean |>
        aes(x = min_bin, y = n)) +
   geom_point(alpha = 0.2) +
   geom_smooth(method = "lm", formula = y ~ x + I(x^2), color = "royalblue", se = FALSE) +
-  labs(title = "Effect of Time of Day on Scarlet Tanager Counts",
-       x = "Time of Day (15-min bins)",
+  scale_x_continuous(breaks = tick_y, labels = tick_labels_y) +
+  labs(title = "Scarlet Tanager",
+       x = "Time of Day",
        y = "Vocalization Count")+
   theme_minimal()
+
+SCT_time_effects <- SCT_time + theme(axis.title.x = element_text(size = 16),
+                                  axis.title.y = element_text(size = 16),
+                                  plot.title = element_text(size = 20),
+                                  axis.text.x = element_text(size = 12),
+                                  axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+SCT_time_effects
 
 #julian day effects
 SCT_jd <- ggplot(full_counts_clean |>
@@ -199,14 +214,21 @@ SCT_jd <- ggplot(full_counts_clean |>
        aes(x = julian_day, y = n)) +
   geom_point(alpha = 0.4, color = "skyblue2") +
   geom_smooth(method = "lm", se = TRUE, color = "turquoise4") +
+  scale_x_continuous(breaks = tick_x, labels = tick_labels_x) +
   labs(
-    title = "Seasonal Trend in Detections",
-    subtitle = "Scarlet Tanager - Julian Day vs Detection Count",
-    x = "Julian Day",
-    y = "Detection Count"
+    title = "Scarlet Tanager",
+    x = "DOY",
+    y = "Vocalization Count"
   ) +
   theme_minimal()
 
+SCT_day_effects <- SCT_jd + theme(axis.title.x = element_text(size = 16),
+                                  axis.title.y = element_text(size = 16),
+                                  plot.title = element_text(size = 20),
+                                  axis.text.x = element_text(size = 12),
+                                  axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+SCT_day_effects
 ##################################
 
 # Arranging these into a panel graph

@@ -69,7 +69,7 @@ k9_stats<- k9_total%>%
 
 ```{r plotting-jdVspecies, fig.path='figures/k9/'}
 
-png("C:/git/MasonFarmARUs/figures/jdVdect.png", width = 1200, height =1000)
+#png("C:/git/MasonFarmARUs/figures/jdVdect.png", width = 1200, height =1000)
 par(mar = c(5, 5, 4, 2) + 2.3,
      mgp = c(4.1, 1, 0))
 # Mapping Julian Day Versus the Number of Observations for the top Seven Species
@@ -137,7 +137,7 @@ legend("topright",
        col = c("lightgoldenrod", "lightblue", "lightgreen", "lightcoral", "plum3", "royalblue"),
        lwd = 2,
        cex = 2.0)
-dev.off()
+#dev.off()
 ```
 
 ```{r}
@@ -197,9 +197,9 @@ tick_y <- c(1, 2, 4, 6, 8, 10, 12)
 tick_at_y <- (tick_y -1)/ (ncol(af_matrix) -1)
 tick_labels_y <- c("5:45", "6:00", "6:30", "7:00", "7:30", "8:00", "8:30")
 
-tick_x <- c(3, 17, 33, 47, 51)
+tick_x <- c(3, 18, 33, 48, 51)
 tick_at_x <- (tick_x - 1)/ (nrow(af_matrix) - 1)
-tick_labels_x <- c( "June 1", "June 15", "July 1", "July 15", "July 19")
+tick_labels_x <- c( "June 1", "June 16", "July 1", "July 16", "July 19")
 ```
 
 ### Acadian Flycatcher Matrix
@@ -263,6 +263,15 @@ dev.off()
 ## Summer Tanager Matrix
 
 ```{r}
+
+png("C:/git/MasonFarmARUs/figures/st_test.png", width = 1200, height =1000)
+# Set graphical parameters to match your line plot style
+par(mar = c(12, 12, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(5, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
 st_matrix <- full_counts_clean |>
   filter(Bird.Call == "Summer Tanager") |>
   select(julian_day, min_bin, n)|>
@@ -279,21 +288,40 @@ rownames(st_matrix) <- full_counts_clean|>
   pull(julian_day)
 
 
-par(mar = c(5, 5, 2, 8))
 image(st_matrix, axes = FALSE, col = colorRampPalette(c("white", "navy"))(256),)
 
-axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
 
-axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
-# Add title and axis labels
-title(main = "Summer Tanager", cex.main = 1.5)  # Main title
-mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Summer Tanager", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 10, cex = 3.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 3.0, font=2)  # Increased line pushes label left
 ```
 
 ## Yellow-throated Vireo Matrix
 
 ```{r}
+
+png("C:/git/MasonFarmARUs/figures/yv_test.png", width = 1200, height =1000)
+# Set graphical parameters to match your line plot style
+par(mar = c(12, 12, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(5, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
 yv_matrix <- full_counts_clean |>
   filter(Bird.Call == "Yellow-throated Vireo") |>
   select(julian_day, min_bin, n)|>
@@ -309,22 +337,42 @@ rownames(yv_matrix) <- full_counts_clean|>
   distinct()|>
   pull(julian_day)
 
-
-par(mar = c(5, 5, 2, 8))
 image(yv_matrix, axes = FALSE, col = colorRampPalette(c("white", "darkgreen"))(256),)
 
-axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
 
-axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
-# Add title and axis labels
-title(main = "Yellow-throated Vireo", cex.main = 1.5)  # Main title
-mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Yellow-throated Vireo", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 10, cex = 3.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 3.0, font=2)  # Increased line pushes label left
+
+dev.off()
 ```
 
 ## Eastern Wood-Pewee Matrix
 
 ```{r}
+
+png("C:/git/MasonFarmARUs/figures/ep_test.png", width = 1200, height =1000)
+# Set graphical parameters to match your line plot style
+par(mar = c(12, 12, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(5, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
 ep_matrix <- full_counts_clean |>
   filter(Bird.Call == "Eastern Wood-Pewee") |>
   select(julian_day, min_bin, n)|>
@@ -341,21 +389,41 @@ rownames(ep_matrix) <- full_counts_clean|>
   pull(julian_day)
 
 
-par(mar = c(5, 5, 2, 8))
 image(ep_matrix, axes = FALSE, col = colorRampPalette(c("white", "maroon"))(256),)
 
-axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
 
-axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
-# Add title and axis labels
-title(main = "Eastern Wood-Pewee", cex.main = 1.5)  # Main title
-mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Eastern Wood-Pewee", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 10, cex = 3.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 3.0, font=2)  # Increased line pushes label left
+
+dev.off()
 ```
 
 ## Tufted Titmouse Matrix
 
 ```{r}
+png("C:/git/MasonFarmARUs/figures/tt_test.png", width = 1200, height =1000)
+# Set graphical parameters to match your line plot style
+par(mar = c(12, 12, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(5, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
 tt_matrix <- full_counts_clean |>
   filter(Bird.Call == "Tufted Titmouse") |>
   select(julian_day, min_bin, n)|>
@@ -372,21 +440,42 @@ rownames(tt_matrix) <- full_counts_clean|>
   pull(julian_day)
 
 
-par(mar = c(5, 5, 2, 8))
 image(tt_matrix, axes = FALSE, col = colorRampPalette(c("white", "purple"))(256),)
 
-axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
 
-axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
-# Add title and axis labels
-title(main = "Tufted Titmouse", cex.main = 1.5)  # Main title
-mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Tufted Titmouse", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 10, cex = 3.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 3.0, font=2)  # Increased line pushes label left
+
+dev.off()
 ```
 
 ## Scarlet Tanager Matrix
 
 ```{r}
+
+png("C:/git/MasonFarmARUs/figures/sct_test.png", width = 1200, height =1000)
+# Set graphical parameters to match your line plot style
+par(mar = c(12, 12, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(5, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
 sct_matrix <- full_counts_clean |>
   filter(Bird.Call == "Scarlet Tanager") |>
   select(julian_day, min_bin, n)|>
@@ -403,22 +492,38 @@ rownames(sct_matrix) <- full_counts_clean|>
   pull(julian_day)
 
 
-par(mar = c(5, 5, 2, 8))
 image(sct_matrix, axes = FALSE, col = colorRampPalette(c("white", "royalblue"))(256),)
 
-axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
 
-axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
-# Add title and axis labels
-title(main = "Scarlet Tanager", cex.main = 1.5)  # Main title
-mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Scarlet Tanager", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 10, cex = 3.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 3.0, font=2)  # Increased line pushes label left
+
+dev.off()
 ```
 
 ## Arranging these graphs into a panel figure
 
 ```{r}
-png("C:/git/MasonFarmARUs/figures/species_matrices.png", width = 800, height = 1200)
+layout1 <- ()
+```
+
+```{r}
+png("C:/git/MasonFarmARUs/figures/species_matrices.png", width = 1000, height = 1400)
 
 par(mfrow = c(3, 2), mar = c(5, 4, 4, 4))
 
