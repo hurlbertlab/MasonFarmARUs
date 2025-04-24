@@ -100,18 +100,26 @@ ST_time_effects <- ST_time + theme(axis.title.x = element_text(size = 16),
 ST_time_effects
 
 #Julian Day effects
-ST_jd<-ggplot(full_counts_clean |>
+st_jd<-ggplot(full_counts_clean |>
                 filter(Bird.Call == "Summer Tanager"),
               aes(x = julian_day, y = n))+
   geom_point(alpha = 0.4, color = "skyblue2") +
   geom_smooth(method = "lm", se = TRUE, color = "navy") +
+  scale_x_continuous(breaks = tick_x, labels = tick_labels_x)+
   labs(
-    title = "Seasonal Trend in Detections",
-    subtitle = "Summer Tanager - Julian Day vs Detection Count",
-    x = "Julian Day",
-    y = "Detection Count"
+    title = "Summer Tanager",
+    x = "DOY",
+    y = "Vocalization Count"
   ) +
   theme_minimal()
+
+st_jd_effects <- st_jd + theme(axis.title.x = element_text(size = 16),
+                               axis.title.y = element_text(size = 16),
+                               plot.title = element_text(size = 20),
+                               axis.text.x = element_text(size = 12),
+                               axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+st_jd_effects
 
 ST_no_min <- lm_model_no_signif("Summer Tanager", full_counts_clean)
 ST_no_min

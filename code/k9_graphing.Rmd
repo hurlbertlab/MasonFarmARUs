@@ -519,7 +519,7 @@ dev.off()
 ## Arranging these graphs into a panel figure
 
 ```{r}
-layout1 <- ()
+
 ```
 
 ```{r}
