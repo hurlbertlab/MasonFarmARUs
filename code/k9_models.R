@@ -147,25 +147,29 @@ yv_time_effects <- yv_time + theme(axis.title.x = element_text(size = 16),
   theme(plot.title=element_text(hjust=0.5))
 yv_time_effects
 #Julian Day effects
-YV_jd <- ggplot(full_counts_clean |>
-         filter(Bird.Call == "Yellow-throated Vireo"), 
-       aes(x = julian_day, y = n)) +
+yv_jd<-ggplot(full_counts_clean |>
+                filter(Bird.Call == "Yellow-throated Vireo"),
+              aes(x = julian_day, y = n))+
   geom_point(alpha = 0.4, color = "skyblue2") +
   geom_smooth(method = "lm", se = TRUE, color = "darkgreen") +
+  scale_x_continuous(breaks = tick_x, labels = tick_labels_x)+
   labs(
-    title = "Seasonal Trend in Detections",
-    subtitle = "Yellow-throated Vireo - Julian Day vs Detection Count",
-    x = "Julian Day",
-    y = "Detection Count"
+    title = "Yellow-throated Vireo",
+    x = "DOY",
+    y = "Vocalization Count"
   ) +
   theme_minimal()
 
+yv_jd_effects <- yv_jd + theme(axis.title.x = element_text(size = 16),
+                               axis.title.y = element_text(size = 16),
+                               plot.title = element_text(size = 20),
+                               axis.text.x = element_text(size = 12),
+                               axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+yv_jd_effects
+
 
 #Eastern Wood-Pewee
-EP <- lm_model("Eastern Wood-Pewee", full_counts_clean)
-EP
-
-#Time of Day effects
 ep_time <- ggplot(full_counts_clean |>
                     filter(Bird.Call == "Eastern Wood-Pewee"), 
                   aes(x = min_bin, y = n)) +
@@ -183,20 +187,26 @@ ep_time_effects <- ep_time + theme(axis.title.x = element_text(size = 16),
                                    axis.text.y = element_text(size=12))+
   theme(plot.title=element_text(hjust=0.5))
 ep_time_effects
-
-#julian day effects
-EP_jd <- ggplot(full_counts_clean |>
-         filter(Bird.Call == "Eastern Wood-Pewee"), 
-       aes(x = julian_day, y = n)) +
+ep_jd<-ggplot(full_counts_clean |>
+                filter(Bird.Call == "Eastern Wood-Pewee"),
+              aes(x = julian_day, y = n))+
   geom_point(alpha = 0.4, color = "skyblue2") +
   geom_smooth(method = "lm", se = TRUE, color = "maroon") +
+  scale_x_continuous(breaks = tick_x, labels = tick_labels_x)+
   labs(
-    title = "Seasonal Trend in Detections",
-    subtitle = "Yellow-throated Vireo - Julian Day vs Vocalization",
-    x = "Julian Day",
+    title = "Eastern Wood-Pewee",
+    x = "DOY",
     y = "Vocalization Count"
   ) +
   theme_minimal()
+
+ep_jd_effects <- ep_jd + theme(axis.title.x = element_text(size = 16),
+                               axis.title.y = element_text(size = 16),
+                               plot.title = element_text(size = 20),
+                               axis.text.x = element_text(size = 12),
+                               axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+ep_jd_effects
 
 #Tufted Titmouse
 TT <- lm_model("Tufted Titmouse", full_counts_clean)
@@ -225,18 +235,26 @@ tt_time_effects <- tt_time + theme(axis.title.x = element_text(size = 16),
 tt_time_effects
 
 #Julian Day Effects 
-TT_jd <-ggplot(full_counts_clean |>
-         filter(Bird.Call == "Tufted Titmouse"), 
-       aes(x = julian_day, y = n)) +
+tt_jd<-ggplot(full_counts_clean |>
+                filter(Bird.Call == "Tufted Titmouse"),
+              aes(x = julian_day, y = n))+
   geom_point(alpha = 0.4, color = "skyblue2") +
   geom_smooth(method = "lm", se = TRUE, color = "purple4") +
+  scale_x_continuous(breaks = tick_x, labels = tick_labels_x)+
   labs(
-    title = "Seasonal Trend in Vocalizations",
-    subtitle = "Tufted Titmouse - Julian Day vs Vocalization Count",
-    x = "Julian Day",
+    title = "Tufted Titmouse",
+    x = "DOY",
     y = "Vocalization Count"
   ) +
   theme_minimal()
+
+tt_jd_effects <- tt_jd + theme(axis.title.x = element_text(size = 16),
+                               axis.title.y = element_text(size = 16),
+                               plot.title = element_text(size = 20),
+                               axis.text.x = element_text(size = 12),
+                               axis.text.y = element_text(size=12))+
+  theme(plot.title=element_text(hjust=0.5))
+tt_jd_effects
 
 #Scarlet Tanager
 SCT <- lm_model("Scarlet Tanager", full_counts_clean)
@@ -288,19 +306,15 @@ SCT_day_effects
 # Arranging these into a panel graph
 
 ##################################
-# Plotting first half in a panel graph
-png("C:/git/MasonFarmARUs/figures/linear_models.png", width = 800, height = 1200)
-layout1 <- (AF_time | AF_jd ) / ( EP_time| EP_jd) / (YV_time | YV_jd)
-layout1 + plot_annotation(title = "Bird Detection Patterns",
-                         subtitle = "By Species Across Julian Day and Time of Day")
-dev.off()
+# Plotting time of day effects panel
+layout1 <- (AF_time_effects | ST_time_effects ) / ( ep_time_effects| yv_time_effects) / (tt_time_effects | SCT_time_effects)
+ggsave("C:/git/MasonFarmARUs/figures/linear_models.png", plot = layout1,
+       +        width = 8, height = 12, units = "in", dpi = 300)
 
 # Plotting second half in a panel graph 
-png("C:/git/MasonFarmARUs/figures/linear_models2.png", width = 800, height = 1200)
-layout1 <- (ST_time | ST_jd ) / ( TT_time| TT_jd) / (SCT_time | SCT_jd)
-layout1 + plot_annotation(title = "Bird Detection Patterns",
-                          subtitle = "By Species Across Julian Day and Time of Day")
-dev.off()
+layout2 <- (AF_jd_effects | st_jd_effects ) / ( ep_jd_effects| yv_jd_effects) / (tt_jd_effects| SCT_day_effects)
+ggsave("C:/git/MasonFarmARUs/figures/linear_models2.png", plot = layout2,
+       width = 8, height = 12, units = "in", dpi = 300)
 
 
 ##################################
