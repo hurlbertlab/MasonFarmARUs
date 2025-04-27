@@ -193,9 +193,9 @@ full_counts_clean <- full_counts |>
 
 ```{r}
 # Creating X Axis (Time of day) labels
-tick_y <- c(1, 2, 4, 6, 8, 10, 12)
+tick_y <- c(2, 4, 6, 8, 10, 12)
 tick_at_y <- (tick_y -1)/ (ncol(af_matrix) -1)
-tick_labels_y <- c("5:45", "6:00", "6:30", "7:00", "7:30", "8:00", "8:30")
+tick_labels_y <- c("6:00", "6:30", "7:00", "7:30", "8:00", "8:30")
 
 tick_x <- c(3, 18, 33, 48, 51)
 tick_at_x <- (tick_x - 1)/ (nrow(af_matrix) - 1)
@@ -525,7 +525,10 @@ dev.off()
 ```{r}
 png("C:/git/MasonFarmARUs/figures/species_matrices.png", width = 1000, height = 1400)
 
-par(mfrow = c(3, 2), mar = c(5, 4, 4, 4))
+par(mfrow = c(3, 2), mar = c(5, 4, 4, 4), 
+    mgp = c(5,3.0,0),
+    cex.lab =6.5,
+    cex.axis = 3.5, cex.main=3.5)
 
 # Acadian flycatcher 
 af_matrix <- full_counts_clean |>
@@ -543,16 +546,17 @@ rownames(af_matrix) <- full_counts_clean|>
   distinct()|>
   pull(julian_day)
 
-par(mar = c(5, 5, 2, 8))
 image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","darkorange"))(256))
 
-axis(1, at = tick_at_x, labels = tick_labels_x, las = 2)
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2,
+     cex.axis = 2.5)
 
-axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour labels
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2,
+     cex.axis = 2.5) #modify to put hour labels
 # Add title and axis labels
-title(main = "Acadian Flycatcher", cex.main = 1.5)  # Main title
-mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
-mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+title(main = "Acadian Flycatcher", line = 1)  # Main title
+mtext("DOY", side = 1, line = 10, cex = 3.0, font=2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 9, cex = 3.0, font=2)  # Y-axis label
 
 
 # Summer Tanager 
@@ -703,6 +707,283 @@ axis(2, at = tick_at_y, labels = tick_labels_y, las = 2) #modify to put hour lab
 title(main = "Scarlet Tanager", cex.main = 1.5)  # Main title
 mtext("DOY", side = 1, line = 2.5, cex = 1.2)  # X-axis label
 mtext("TOD (AM)", side = 2, line = 2.5, cex = 1.2)  # Y-axis label
+
+dev.off()
+```
+
+```{r}
+library(magick)
+library(ggplotify)
+library(patchwork)
+
+afImage <- image_read("C:/git/MasonFarmARUs/figures/af_test.png")
+stImage <- image_read("C:/git/MasonFarmARUs/figures/yv_test.png")
+yvImage <- image_read("C:/git/MasonFarmARUs/figures/yv_test.png")
+epImage <-image_read("C:/git/MasonFarmARUs/figures/ep_test.png")
+ttImage <- image_read("C:/git/MasonFarmARUs/figures/tt_test.png")
+sctImage <- image_read("C:/git/MasonFarmARUs/figures/sct_test.png")
+
+p1 <- as.ggplot(afImage)
+p2 <- as.ggplot(stImage)
+p3 <- as.ggplot(yvImage)
+p4 <- as.ggplot(epImage)
+p5 <- as.ggplot(ttImage)
+p6 <- as.ggplot(sctImage)
+
+layout3 <- (p1 | p2) / ( p3| p4) / (p5|p6)
+ggsave("C:/git/MasonFarmARUs/figures/species_matrix.png", plot = layout3,
+       width = 8, height = 12, units = "in", dpi = 300)
+```
+
+```{r}
+png("C:/git/MasonFarmARUs/figures/speciesMats.png", width = 1000, height = 1400)
+
+par(mfrow = c(3, 2), mar = c(16, 15, 6, 8), 
+    mgp = c(3,3.0,0),
+    cex.lab =6.5,
+    cex.axis = 3.5, cex.main=3.5)
+
+# Acadian flycatcher 
+af_matrix <- full_counts_clean |>
+  filter(Bird.Call == "Acadian Flycatcher") |>
+  select(julian_day, min_bin, n)|>
+  pivot_wider(
+    names_from = min_bin,
+    values_from = n
+  ) |>
+  select(-julian_day) |>
+  as.matrix()
+rownames(af_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Acadian Flycatcher")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
+
+image(af_matrix, axes = FALSE, col = colorRampPalette(c("white","darkorange"))(256))
+
+axis(1, at = tick_at_x, labels = tick_labels_x, las = 2,
+     cex.axis = 2.5)
+
+axis(2, at = tick_at_y, labels = tick_labels_y, las = 2,
+     cex.axis = 2.5) #modify to put hour labels
+# Add title and axis labels
+title(main = "Acadian Flycatcher", line = 1)  # Main title
+mtext("DOY", side = 1, line = 14, cex = 2.0, font=2)  # X-axis label
+mtext("TOD (AM)", side = 2, line = 9, cex = 2.0, font=2)  # Y-axis label
+
+# Summer Tanager
+par(mar = c(16, 15, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(3, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)   
+st_matrix <- full_counts_clean |>
+  filter(Bird.Call == "Summer Tanager") |>
+  select(julian_day, min_bin, n)|>
+  pivot_wider(
+    names_from = min_bin,
+    values_from = n
+  ) |>
+  select(-julian_day) |>
+  as.matrix()
+rownames(st_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Summer Tanager")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
+
+
+image(st_matrix, axes = FALSE, col = colorRampPalette(c("white", "navy"))(256),)
+
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
+
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Summer Tanager", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 14, cex = 2.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 2.0, font=2)  # Increased line pushes label left
+
+par(mar = c(16, 15, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(3, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
+yv_matrix <- full_counts_clean |>
+  filter(Bird.Call == "Yellow-throated Vireo") |>
+  select(julian_day, min_bin, n)|>
+  pivot_wider(
+    names_from = min_bin,
+    values_from = n
+  ) |>
+  select(-julian_day) |>
+  as.matrix()
+rownames(yv_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Yellow-throated Vireo")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
+
+image(yv_matrix, axes = FALSE, col = colorRampPalette(c("white", "darkgreen"))(256),)
+
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
+
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Yellow-throated Vireo", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 14, cex = 2.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 2.0, font=2)  # Increased line pushes label left
+
+par(mar = c(16, 15, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(3, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
+ep_matrix <- full_counts_clean |>
+  filter(Bird.Call == "Eastern Wood-Pewee") |>
+  select(julian_day, min_bin, n)|>
+  pivot_wider(
+    names_from = min_bin,
+    values_from = n
+  ) |>
+  select(-julian_day) |>
+  as.matrix()
+rownames(ep_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Eastern Wood-Pewee")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
+
+
+image(ep_matrix, axes = FALSE, col = colorRampPalette(c("white", "maroon"))(256),)
+
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
+
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Eastern Wood-Pewee", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 14, cex = 2.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 2.0, font=2)  # Increased line pushes label left
+
+par(mar = c(16, 15, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(3, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
+tt_matrix <- full_counts_clean |>
+  filter(Bird.Call == "Tufted Titmouse") |>
+  select(julian_day, min_bin, n)|>
+  pivot_wider(
+    names_from = min_bin,
+    values_from = n
+  ) |>
+  select(-julian_day) |>
+  as.matrix()
+rownames(tt_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Tufted Titmouse")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
+
+
+image(tt_matrix, axes = FALSE, col = colorRampPalette(c("white", "purple"))(256),)
+
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
+
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Tufted Titmouse", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 14, cex = 2.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 2.0, font=2)  # Increased line pushes label left
+
+par(mar = c(16, 15, 6, 8),  # Bottom, Left, Top, Right margins
+    mgp = c(3, 3.0, 0),    # Axis title, labels, line positions
+    cex.lab = 2.5,         # Axis label size
+    cex.axis = 2.5,        # Tick label size
+    cex.main = 3.5)        # Main title size
+
+sct_matrix <- full_counts_clean |>
+  filter(Bird.Call == "Scarlet Tanager") |>
+  select(julian_day, min_bin, n)|>
+  pivot_wider(
+    names_from = min_bin,
+    values_from = n
+  ) |>
+  select(-julian_day) |>
+  as.matrix()
+rownames(sct_matrix) <- full_counts_clean|>
+  filter(Bird.Call == "Scarlet Tanager")|>
+  select(julian_day)|>
+  distinct()|>
+  pull(julian_day)
+
+
+image(sct_matrix, axes = FALSE, col = colorRampPalette(c("white", "royalblue"))(256),)
+
+# Custom x-axis (DOY)
+axis(1, 
+     at = tick_at_x, 
+     labels = tick_labels_x, 
+     las = 2,          # Perpendicular labels
+     cex.axis = 2.5)
+
+# Custom y-axis (Time of Day)
+axis(2, 
+     at = tick_at_y, 
+     labels = tick_labels_y, 
+     las = 1,          # Horizontal labels
+     cex.axis = 2.5)
+
+# Add titles using mtext() for better control
+title(main = "Scarlet Tanager", line = 1)  # line adjusts vertical position
+mtext("DOY", side = 1, line = 14, cex = 2.0,font=2)  # Increased line value pushes label down
+mtext("TOD (AM)", side = 2, line = 9, cex = 2.0, font=2)  # Increased line pushes label left
 
 dev.off()
 ```

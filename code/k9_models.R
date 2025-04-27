@@ -26,8 +26,8 @@ lm_model_no_signif <- function(species_name, data){
 }
 
 # Creating X Axis (Time of day) labels
-tick_y <- c(1, 2, 4, 6, 8, 10, 12)
-tick_labels_y <- c("5:45", "6:00", "6:30", "7:00", "7:30", "8:00", "8:30")
+tick_y <- c(2, 4, 6, 8, 10, 12)
+tick_labels_y <- c("6:00", "6:30", "7:00", "7:30", "8:00", "8:30")
 
 tick_x <- c(152, 167, 182, 197, 213)
 tick_labels_x <- c("June 1", "June 16", "July 1", "July 16", "August 1")
@@ -309,7 +309,7 @@ SCT_day_effects
 # Plotting time of day effects panel
 layout1 <- (AF_time_effects | ST_time_effects ) / ( ep_time_effects| yv_time_effects) / (tt_time_effects | SCT_time_effects)
 ggsave("C:/git/MasonFarmARUs/figures/linear_models.png", plot = layout1,
-       +        width = 8, height = 12, units = "in", dpi = 300)
+       width = 8, height = 12, units = "in", dpi = 300)
 
 # Plotting second half in a panel graph 
 layout2 <- (AF_jd_effects | st_jd_effects ) / ( ep_jd_effects| yv_jd_effects) / (tt_jd_effects| SCT_day_effects)
